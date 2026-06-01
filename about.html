@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Ces Luscious Foods · Admin Editable</title>
+  <style>
+    :root {
+  --ink:     #1c0f2e;
+  --ink-2:   #3a1f5c;
+  --ink-3:   #6b5280;
+  --ink-4:   #a891c0;
+  --cream:   #fdf8f2;
+  --cream-2: #f5ede0;
+  --cream-3: #ede0cc;
+  --plum:    #4a1569;
+  --plum-2:  #6b2d94;
+  --plum-3:  #9b5bc4;
+  --plum-pale:#f0e8f8;
+  --gold:    #c8832a;
+  --gold-2:  #e9a84e;
+  --gold-pale:#fdf0dc;
+  --rose:    #b83560;
+  --rose-pale:#fce8ef;
+  --mint:    #1e7a5a;
+  --mint-pale:#e0f5ed;
+  --white:   #ffffff;
+  --border:  rgba(74,21,105,0.1);
+  --border-2:rgba(74,21,105,0.18);
+  --shadow:  0 2px 16px rgba(74,21,105,0.08);
+  --shadow-lg:0 8px 40px rgba(74,21,105,0.15);
+  --shadow-xl:0 20px 60px rgba(74,21,105,0.2);
+  --r: 18px;
+  --r-sm: 10px;
+  --r-lg: 28px;
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Poppins', sans-serif;
+      background: #ffffff;
+      color: #1e1a2f;
+      line-height: 1.5;
+    }
+
+/* ── NAVBAR ── */
+.nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(253,248,242,0.93);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:64px;
+  transition:box-shadow .3s;
+}
+.nav.scrolled{box-shadow:var(--shadow)}
+.nav-logo{
+  font-family:'Fraunces',serif;
+  font-size:1.35rem;font-weight:600;
+  color:var(--plum);
+  display:flex;align-items:center;gap:10px;
+  letter-spacing:-.01em;text-decoration:none;
+}
+.nav-logo-mark{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--plum),var(--plum-2));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;
+  box-shadow:0 2px 8px rgba(74,21,105,.3);
+}
+.nav-links{display:flex;gap:2px}
+.nav-links a{
+  color:var(--ink-3);text-decoration:none;
+  font-size:.82rem;font-weight:500;letter-spacing:.01em;
+  padding:.45rem .95rem;border-radius:99px;
+  transition:all .18s;
+}
+.nav-links a:hover,.nav-links a.active{
+  color:var(--plum);background:var(--plum-pale);
+}
+.nav-right{display:flex;gap:10px;align-items:center}
+
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      background: #f0eaff;
+      padding: 0.3rem 0.9rem;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      border: 1px solid #e3d6ff;
+      color: #5a2dca;
+      font-weight: 500;
+    }
+    .cart-icon:hover {
+      background: #e8ddff;
+      border-color: #cbb5ff;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #6a3cc9;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 50%;
+      box-shadow: 0 0 4px #c4b0f0;
+    }
+
+    .logout-btn {
+      background: #f0eaff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #e2d6ff;
+      color: #4a2b9e;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+      margin-left: 0.5rem;
+    }
+
+    .logout-btn:hover {
+      background: #e4d6ff;
+      transform: scale(1.02);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Hero section - soft purple */
+    .hero {
+      text-align: center;
+      padding: 3rem;
+      background: #e3d6ff;
+      border-radius: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e9e0ff;
+      box-shadow: 0 2px 12px rgba(90, 45, 202, 0.04);
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #5a2dca, #9b6eff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero .tagline {
+      font-size: 1.1rem;
+      color: #4a3a6a;
+    }
+
+    /* Admin Edit Button */
+    .admin-edit-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1rem;
+    }
+
+    .edit-toggle-btn {
+      background: linear-gradient(135deg, #6a3cc9, #9b6eff);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+      box-shadow: 0 2px 6px rgba(106, 60, 201, 0.2);
+    }
+
+    .edit-toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(106, 60, 201, 0.3);
+    }
+
+    .save-btn {
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      margin-left: 0.5rem;
+    }
+
+    .cancel-btn {
+      background: linear-gradient(135deg, #757575, #9e9e9e);
+    }
+
+    /* About cards grid: only two cards (Our Story + Mission) with identical size */
+    .story-mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin: 1rem 0 1rem 0;
+    }
+
+    /* Base card style - used for both Our Story and Mission, matching visual size */
+    .info-card {
+      background: #f0eaff;
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 1px solid #e3d6ff;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 4px 12px rgba(90, 45, 202, 0.05);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(90, 45, 202, 0.1);
+      background: #e8ddff;
+      border-color: #cbb5ff;
+    }
+
+    .info-card h2 {
+      color: #5a2dca;
+      margin-bottom: 1.2rem;
+      font-size: 1.7rem;
+      border-left: 5px solid #9b6eff;
+      padding-left: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .info-card h2 .edit-icon {
+      font-size: 0.9rem;
+      background: #e3d5ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .info-card h2 .edit-icon:hover {
+      background: #cbb5ff;
+    }
+
+    .info-card p {
+      line-height: 1.7;
+      color: #4a3a6a;
+      font-size: 1rem;
+      flex: 1;
+    }
+
+    /* Editable textarea style */
+    .edit-textarea {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      padding: 1rem;
+      border: 2px solid #9b6eff;
+      border-radius: 0.8rem;
+      background: white;
+      resize: vertical;
+      color: #1e1a2f;
+    }
+
+    .edit-textarea:focus {
+      outline: none;
+      border-color: #6a3cc9;
+      box-shadow: 0 0 0 3px rgba(106, 60, 201, 0.1);
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      justify-content: flex-end;
+    }
+
+    .small-btn {
+      background: #f0eaff;
+      border: 1px solid #e3d6ff;
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .small-btn.save {
+      background: #6a3cc9;
+      color: white;
+      border: none;
+    }
+
+    .small-btn.save:hover {
+      background: #5a2dca;
+    }
+
+    .small-btn.cancel:hover {
+      background: #e4d6ff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #4a3a6a;
+      border-top: 1px solid #e9e0ff;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+      .nav-links {
+        justify-content: center;
+      }
+      .story-mission-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .info-card {
+        padding: 1.5rem;
+      }
+      .info-card h2 {
+        font-size: 1.4rem;
+      }
+      .admin-edit-bar {
+        justify-content: center;
+      }
+    }
+
+    /* subtle scroll */
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: #f0eaff;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c4b0f0;
+      border-radius: 10px;
+    }
+
+    /* Toast message style */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #5a2dca;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      z-index: 2200;
+      transition: opacity 0.2s;
+      opacity: 0;
+      box-shadow: 0 4px 12px rgba(90, 45, 202, 0.3);
+      font-family: 'Inter', sans-serif;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    /* Modal styles for admin */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      max-width: 600px;
+      width: 90%;
+      padding: 2rem;
+      box-shadow: 0 20px 35px rgba(90, 45, 202, 0.2);
+      border: 1px solid #e3d6ff;
+    }
+
+    .modal-content h3 {
+      color: #5a2dca;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 1rem;
+      border: 2px solid #e3d6ff;
+      border-radius: 1rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    .modal-content textarea:focus {
+      outline: none;
+      border-color: #9b6eff;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .modal-actions button {
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .modal-save {
+      background: #6a3cc9;
+      color: white;
+    }
+
+    .modal-cancel {
+      background: #f0eaff;
+      color: #4a2b9e;
+    }
+  </style>
+</head>
+<body>
+<nav class="nav" id="mainNav">
+  <a href="home.html" class="nav-logo">
+    <div class="nav-logo-mark">🍰</div>
+    Ces Luscious Foods
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="active">Home</a>
+    <a href="shop.html">Menu</a>
+    <a href="cart.html">My Bag</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="profile.html">My Profile</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+  <div class="container">
+    <!-- Admin Edit Button - only visible to admin -->
+    <div class="admin-edit-bar" id="adminEditBar" style="display: none;">
+      <button class="edit-toggle-btn" onclick="enableGlobalEdit()">✏️ Edit About Content</button>
+    </div>
+
+    <div class="hero">
+      <h1 id="heroTitle">About Ces Luscious Foods</h1>
+      <div class="tagline" id="heroTagline">✨ "Premium Taste, Seamless Service, Affordable Joy." — Since 2019</div>
+    </div>
+
+    <!-- ONLY TWO SECTIONS: OUR STORY + MISSION, SAME SIZE -->
+    <div class="story-mission-grid" id="aboutGrid">
+      <!-- Our Story Card -->
+      <div class="info-card" id="storyCard">
+        <h2>📖 Our Story <span class="edit-icon" onclick="editSection('story')" style="display:none;">✏️ Edit</span></h2>
+        <div id="storyContent">
+          <p>Ces Luscious Foods was established in 2019 under the management of Cecile Muncal. What started as a small home-based business has grown into a beloved brand known for delivering <strong>"sweetness for every occasion"</strong> through authentic Filipino delicacies and sweet desserts.</p>
+          <p>Our journey began with a passion for creating traditional Filipino treats that bring joy to every celebration. From humble beginnings, we've expanded our reach through social media, connecting with customers who share our love for authentic, high-quality desserts.</p>
+          <p>Today, Ces Luscious Foods is proud to offer a wide range of products including puto, leche flan, cakes, palitaw, mango graham, ube halaya, and maja blanca — each made with love and the finest ingredients.</p>
+        </div>
+      </div>
+
+      <!-- Mission Card -->
+      <div class="info-card" id="missionCard">
+        <h2>🎯 Our Mission <span class="edit-icon" onclick="editSection('mission')" style="display:none;">✏️ Edit</span></h2>
+        <div id="missionContent">
+          <p>To provide premium taste, seamless service, and affordable joy to every customer, while preserving the authentic flavors of Filipino desserts. We are committed to crafting each product with integrity, using quality ingredients that honor traditional recipes and bring families together.</p>
+          <p>We aim to create delightful experiences — from the first bite to the final moment of satisfaction. Through continuous improvement and heartfelt service, we ensure that every dessert tells a story of passion, heritage, and genuine sweetness. Our mission is to be a cherished part of your celebrations, big or small, and share the warmth of Filipino delicacies with every home.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Ces Luscious Foods · Sweetness for every occasion ·</p>
+  </footer>
+
+  <!-- Toast Component -->
+  <div id="toast" class="toast">✨</div>
+
+  <!-- Modal for editing -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 id="modalTitle">Edit Content</h3>
+      <textarea id="modalTextarea" rows="8"></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-save" onclick="saveModalContent()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // ABOUT PAGE - ADMIN EDITABLE
+    // Stores content in localStorage: ces_about_content
+    // Admins can edit Our Story and Mission
+    // ============================================
+    
+    let currentEditingSection = null;
+    let isAdmin = false;
+    let currentUser = null;
+
+    // Helper: Show toast messages
+    function showMessage(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toast.style.background = isError ? '#d45c5c' : '#6a3cc9';
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Load about content from localStorage
+    function loadAboutContent() {
+      const saved = localStorage.getItem('ces_about_content');
+      if (saved) {
+        try {
+          const content = JSON.parse(saved);
+          if (content.story) {
+            document.getElementById('storyContent').innerHTML = content.story;
+          }
+          if (content.mission) {
+            document.getElementById('missionContent').innerHTML = content.mission;
+          }
+          if (content.heroTitle) {
+            document.getElementById('heroTitle').innerText = content.heroTitle;
+          }
+          if (content.heroTagline) {
+            document.getElementById('heroTagline').innerHTML = content.heroTagline;
+          }
+        } catch(e) { console.warn(e); }
+      }
+    }
+
+    // Save about content to localStorage
+    function saveAboutContent(storyHtml, missionHtml, heroTitle, heroTagline) {
+      const content = {
+        story: storyHtml,
+        mission: missionHtml,
+        heroTitle: heroTitle,
+        heroTagline: heroTagline
+      };
+      localStorage.setItem('ces_about_content', JSON.stringify(content));
+      showMessage('✅ About content saved successfully!', false);
+    }
+
+    // Open modal for editing section
+    function editSection(section) {
+      if (!isAdmin) {
+        showMessage('🔐 Admin access required to edit', true);
+        return;
+      }
+      currentEditingSection = section;
+      const modal = document.getElementById('editModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const textarea = document.getElementById('modalTextarea');
+      
+      if (section === 'story') {
+        modalTitle.innerText = 'Edit Our Story';
+        const storyDiv = document.getElementById('storyContent');
+        // Get inner HTML as text for editing
+        textarea.value = storyDiv.innerHTML;
+      } else if (section === 'mission') {
+        modalTitle.innerText = 'Edit Our Mission';
+        const missionDiv = document.getElementById('missionContent');
+        textarea.value = missionDiv.innerHTML;
+      }
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('active');
+      currentEditingSection = null;
+    }
+
+    function saveModalContent() {
+      if (!currentEditingSection) return;
+      const newContent = document.getElementById('modalTextarea').value;
+      
+      if (currentEditingSection === 'story') {
+        document.getElementById('storyContent').innerHTML = newContent;
+      } else if (currentEditingSection === 'mission') {
+        document.getElementById('missionContent').innerHTML = newContent;
+      }
+      
+      // Save to localStorage
+      const storyHtml = document.getElementById('storyContent').innerHTML;
+      const missionHtml = document.getElementById('missionContent').innerHTML;
+      const heroTitle = document.getElementById('heroTitle').innerText;
+      const heroTagline = document.getElementById('heroTagline').innerHTML;
+      saveAboutContent(storyHtml, missionHtml, heroTitle, heroTagline);
+      
+      closeModal();
+      showMessage('✅ Section updated successfully!', false);
+    }
+
+    function enableGlobalEdit() {
+      if (!isAdmin) return;
+      // Show edit icons on cards
+      const editIcons = document.querySelectorAll('.edit-icon');
+      editIcons.forEach(icon => {
+        icon.style.display = 'inline-flex';
+      });
+      showMessage('✏️ Edit mode enabled — click the ✏️ icon on any card to edit', false);
+      // Auto-hide edit mode indicator after 5 seconds but keep icons visible
+      setTimeout(() => {
+        // Keep icons visible until page reload or another action
+      }, 100);
+    }
+
+    // Cart functionality
+    function getCart() {
+      return JSON.parse(localStorage.getItem('ces_cart') || '[]');
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const count = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      const cartSpan = document.getElementById('cartCount');
+      if (cartSpan) cartSpan.textContent = count;
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      showMessage('👋 Logged out successfully', false);
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1000);
+    }
+
+    // Authentication and Admin Check
+    function checkAuthAndRole() {
+      currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        showMessage('🔐 Please log in to continue', true);
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1500);
+        return false;
+      }
+      
+      // Check if admin
+      if (currentUser.role === 'admin') {
+        isAdmin = true;
+        const adminBar = document.getElementById('adminEditBar');
+        if (adminBar) adminBar.style.display = 'flex';
+        showMessage(`👑 Admin access granted — you can edit About content`, false);
+      } else {
+        // Regular user - no edit capabilities
+        isAdmin = false;
+        const adminBar = document.getElementById('adminEditBar');
+        if (adminBar) adminBar.style.display = 'none';
+        setTimeout(() => {
+          if (currentUser && currentUser.name) {
+            showMessage(`🍰 Welcome back, ${currentUser.name}!`, false);
+          }
+        }, 300);
+      }
+      return true;
+    }
+
+    // Initialize page
+    function init() {
+      if (!checkAuthAndRole()) return;
+      loadAboutContent();
+      updateCartCount();
+    }
+
+    init();
+
+    // Listen to storage events for cart updates and about content sync
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ces_cart') updateCartCount();
+      if (e.key === 'ces_about_content') {
+        loadAboutContent();
+      }
+      if (e.key === 'currentUser') {
+        const refreshedUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!refreshedUser && currentUser) {
+          window.location.reload();
+        } else if (refreshedUser && refreshedUser.role === 'admin' && !isAdmin) {
+          window.location.reload();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

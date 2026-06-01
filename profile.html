@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Ces Luscious Foods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#faf8ff;--surface:#fff;--surface-2:#f3eeff;--surface-3:#ece5ff;
+      --border:#e2d8f8;--border-soft:#ede8fb;
+      --purple-deep:#4c1d95;--purple-main:#6d28d9;--purple-mid:#7c3aed;
+      --purple-light:#8b5cf6;--purple-soft:#c4b5fd;--purple-pale:#ede9fe;
+      --text-primary:#1c1033;--text-secondary:#5b4d7a;--text-muted:#9585b8;
+      --green:#059669;--green-bg:#d1fae5;
+      --amber:#d97706;--amber-bg:#fef3c7;
+      --blue:#2563eb;--blue-bg:#dbeafe;
+      --red:#dc2626;--red-bg:#fee2e2;
+      --shadow-sm:0 1px 3px rgba(109,40,217,0.08);
+      --shadow-md:0 4px 16px rgba(109,40,217,0.12);
+      --shadow-lg:0 12px 40px rgba(109,40,217,0.16);
+      --radius:14px;--radius-sm:8px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-primary);min-height:100vh}
+
+    .navbar{background:var(--surface);border-bottom:1px solid var(--border-soft);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+    .logo{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--purple-main);display:flex;align-items:center;gap:.5rem;text-decoration:none}
+    .nav-links{display:flex;gap:.25rem}
+    .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:.875rem;font-weight:500;padding:.5rem 1rem;border-radius:8px;transition:all .18s}
+    .nav-links a:hover{background:var(--purple-pale);color:var(--purple-main)}
+    .nav-links a.active{background:var(--purple-pale);color:var(--purple-main);font-weight:600}
+    .nav-right{display:flex;align-items:center;gap:.75rem}
+    .cart-btn{display:flex;align-items:center;gap:.4rem;background:var(--surface-2);border:1px solid var(--border);padding:.4rem 1rem;border-radius:99px;color:var(--purple-main);font-weight:600;font-size:.85rem;cursor:pointer;transition:all .18s;position:relative;font-family:'DM Sans',sans-serif}
+    .cart-btn:hover{background:var(--purple-pale);border-color:var(--purple-soft);transform:translateY(-1px)}
+    .cart-badge{background:var(--purple-main);color:white;font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;position:absolute;top:-7px;right:-6px;border:2px solid var(--bg)}
+    .logout-btn{background:none;border:1.5px solid var(--border);padding:.45rem 1.1rem;border-radius:99px;color:var(--text-secondary);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;transition:all .18s}
+    .logout-btn:hover{border-color:var(--purple-light);color:var(--purple-main);background:var(--purple-pale)}
+
+    .container{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+    .page-header{margin-bottom:2rem}
+    .page-title{font-family:'Playfair Display',serif;font-size:2rem;color:var(--purple-deep)}
+    .page-subtitle{color:var(--text-muted);font-size:.875rem;margin-top:.3rem}
+
+    .profile-grid{display:grid;grid-template-columns:340px 1fr;gap:1.5rem;align-items:start}
+    @media(max-width:900px){.profile-grid{grid-template-columns:1fr}}
+
+    .card{background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius);box-shadow:var(--shadow-sm);transition:box-shadow .22s,border-color .22s;overflow:hidden}
+    .card:hover{box-shadow:var(--shadow-md);border-color:var(--purple-soft)}
+    .card-head{background:var(--surface-2);border-bottom:1px solid var(--border-soft);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:.6rem}
+    .card-head h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--purple-deep)}
+    .card-body{padding:1.5rem}
+
+    .avatar-section{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:2rem 1.5rem 1.5rem;border-bottom:1px solid var(--border-soft)}
+    .avatar{width:88px;height:88px;border-radius:50%;background:var(--purple-main);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;color:white;letter-spacing:-.02em;box-shadow:0 4px 16px rgba(109,40,217,0.3);position:relative}
+    .avatar-role{position:absolute;bottom:-4px;right:-4px;background:var(--green);color:white;font-size:.55rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:99px;border:2px solid var(--surface)}
+    .avatar-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--purple-deep);text-align:center}
+    .avatar-email{font-size:.8rem;color:var(--text-muted);text-align:center}
+
+    /* QUICK STATS */
+    .quick-stats{display:grid;grid-template-columns:1fr 1fr 1fr}
+    .qs-item{padding:1rem .5rem;text-align:center;border-right:1px solid var(--border-soft)}
+    .qs-item:last-child{border-right:none}
+    .qs-value{font-size:1.4rem;font-weight:700;color:var(--purple-main);line-height:1;transition:all .3s}
+    .qs-label{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-top:4px}
+    .qs-item.spent .qs-value{color:var(--green)}
+
+    /* FORM */
+    .form-group{margin-bottom:1.1rem}
+    .form-group label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple-main);margin-bottom:.45rem}
+    .form-group input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.875rem;color:var(--text-primary);outline:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+    .form-group input:focus{border-color:var(--purple-light);background:var(--surface);box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
+    .form-group input::placeholder{color:var(--text-muted)}
+    .btn-save{background:var(--purple-main);color:white;border:none;padding:.8rem 2rem;border-radius:99px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.875rem;transition:all .2s;box-shadow:0 2px 10px rgba(109,40,217,0.25);width:100%;margin-top:.5rem}
+    .btn-save:hover{background:var(--purple-deep);transform:translateY(-2px);box-shadow:0 4px 16px rgba(109,40,217,0.35)}
+
+    /* HISTORY TOOLBAR */
+    .history-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem}
+    .filter-tabs{display:flex;gap:.3rem;background:var(--surface-2);padding:4px;border-radius:99px;border:1px solid var(--border-soft);flex-wrap:wrap}
+    .ftab{background:none;border:none;padding:.35rem .9rem;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .18s;white-space:nowrap}
+    .ftab.active{background:var(--purple-main);color:white;box-shadow:0 2px 8px rgba(109,40,217,0.3)}
+    .ftab:not(.active):hover{background:var(--surface);color:var(--purple-main)}
+
+    /* ORDER CARDS */
+    .order-card{background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:1.1rem 1.2rem;margin-bottom:.85rem;transition:all .18s}
+    .order-card:last-child{margin-bottom:0}
+    .order-card:hover{border-color:var(--purple-soft);box-shadow:var(--shadow-sm)}
+    .order-card.cancelled{opacity:.6}
+    .order-card.delivered{border-left:3px solid var(--green)}
+    .order-card.pending{border-left:3px solid var(--amber)}
+    .order-card.processing{border-left:3px solid var(--blue)}
+
+    .order-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}
+    .order-id-date{display:flex;flex-direction:column;gap:2px}
+    .order-id{font-weight:700;color:var(--purple-main);font-size:.82rem}
+    .order-date{font-size:.72rem;color:var(--text-muted)}
+    .order-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .order-total{font-weight:700;font-size:.95rem;color:var(--text-primary)}
+    .order-total.green{color:var(--green)}
+
+    .status-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:99px}
+    .status-badge::before{content:'';width:5px;height:5px;border-radius:99px;background:currentColor;opacity:.7}
+    .badge-pending{background:var(--amber-bg);color:var(--amber)}
+    .badge-processing{background:var(--blue-bg);color:var(--blue)}
+    .badge-delivered{background:var(--green-bg);color:var(--green)}
+    .badge-cancelled{background:var(--red-bg);color:var(--red)}
+
+    .pay-badge{display:inline-flex;align-items:center;background:var(--surface-2);border:1px solid var(--border);color:var(--text-secondary);font-size:.65rem;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:6px}
+
+    .order-items-list{font-size:.8rem;color:var(--text-secondary);margin:.6rem 0;line-height:1.6;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);padding:.5rem 0}
+    .order-item-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0}
+    .order-item-price{font-weight:600;color:var(--text-primary);font-size:.78rem}
+
+    .order-notes{font-size:.75rem;color:var(--text-muted);font-style:italic;margin-top:.5rem;padding:.4rem .6rem;background:var(--purple-pale);border-radius:6px}
+    .order-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.6rem;flex-wrap:wrap;gap:.5rem}
+    .order-addr{font-size:.72rem;color:var(--text-muted)}
+    .order-ref{font-size:.72rem;color:var(--green);font-weight:600}
+
+    .order-totals{margin-top:.5rem;background:var(--surface-2);border-radius:6px;padding:.5rem .7rem;font-size:.78rem}
+    .ot-row{display:flex;justify-content:space-between;color:var(--text-secondary);padding:2px 0}
+    .ot-row.grand{font-weight:700;color:var(--text-primary);border-top:1px solid var(--border);margin-top:4px;padding-top:4px}
+    .ot-row.grand .ot-val{color:var(--purple-main)}
+
+    .cancel-btn{background:var(--red-bg);border:none;padding:.3rem .85rem;border-radius:99px;color:var(--red);font-size:.7rem;font-weight:700;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+    .cancel-btn:hover{background:#fecaca;transform:scale(1.02)}
+    .cancel-btn:disabled{background:var(--surface-2);color:var(--text-muted);cursor:not-allowed;transform:none}
+
+    .empty-state{text-align:center;padding:3rem 2rem;color:var(--text-muted)}
+    .empty-icon{font-size:2.5rem;margin-bottom:.75rem}
+    .empty-state h4{font-size:1rem;color:var(--text-secondary);margin-bottom:.4rem}
+    .empty-state p{font-size:.85rem}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,16,51,0.7);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.active{display:flex}
+    .modal{background:var(--surface);border-radius:20px;border:1px solid var(--border-soft);box-shadow:var(--shadow-lg);max-width:400px;width:100%;padding:2rem;text-align:center;animation:modalIn .25s ease}
+    @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-icon{font-size:2.5rem;margin-bottom:.5rem}
+    .modal h3{font-family:'Playfair Display',serif;color:var(--purple-deep);font-size:1.2rem;margin-bottom:.5rem}
+    .modal p{color:var(--text-secondary);font-size:.875rem;margin-bottom:1.5rem;line-height:1.6}
+    .modal-btns{display:flex;gap:.75rem;justify-content:center}
+    .modal-yes{background:var(--red);color:white;border:none;padding:.65rem 1.6rem;border-radius:99px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+    .modal-yes:hover{background:#b91c1c;transform:translateY(-1px)}
+    .modal-no{background:var(--surface-2);color:var(--purple-main);border:1px solid var(--border);padding:.65rem 1.6rem;border-radius:99px;font-weight:600;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+    .modal-no:hover{background:var(--purple-pale)}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text-primary);color:white;padding:.75rem 1.25rem;border-radius:10px;font-size:.85rem;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s ease;max-width:280px;box-shadow:var(--shadow-lg);pointer-events:none}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast.success{background:var(--green)}
+    .toast.error{background:var(--red)}
+    .toast.info{background:var(--purple-main)}
+
+    footer{text-align:center;padding:2rem;color:var(--text-muted);border-top:1px solid var(--border-soft);margin-top:3rem;font-size:.8rem}
+
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+
+    @media(max-width:640px){
+      .navbar{padding:0 1rem}
+      .nav-links{display:none}
+      .container{padding:1.5rem 1rem}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="home.html" class="logo">
+    <span>🍰</span> Ces Luscious Foods
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="active">Home</a>
+    <a href="shop.html">Menu</a>
+    <a href="cart.html">My Bag</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="profile.html">My Profile</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="window.location.href='cart.html'">
+      🛒 Bag <span class="cart-badge" id="cartCount">0</span>
+    </button>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">My Profile</h1>
+    <p class="page-subtitle">Manage your account and view your order history</p>
+  </div>
+
+  <div class="profile-grid">
+    <!-- LEFT -->
+    <div>
+      <div class="card" style="margin-bottom:1.5rem">
+        <div class="avatar-section">
+          <div class="avatar">
+            <span id="avatarInitials">?</span>
+            <span class="avatar-role" id="avatarRole">Customer</span>
+          </div>
+          <div>
+            <div class="avatar-name" id="displayName">Loading…</div>
+            <div class="avatar-email" id="displayEmail">—</div>
+          </div>
+        </div>
+        <div class="quick-stats">
+          <div class="qs-item">
+            <div class="qs-value" id="qsTotal">0</div>
+            <div class="qs-label">Orders</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-value" id="qsDelivered">0</div>
+            <div class="qs-label">Delivered</div>
+          </div>
+          <div class="qs-item spent">
+            <div class="qs-value" id="qsSpent">₱0</div>
+            <div class="qs-label">Spent</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>✏️</span><h3>Edit Profile</h3></div>
+        <div class="card-body">
+          <form id="profileForm">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="fullName" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="emailField" placeholder="email@example.com" required>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="phoneField" placeholder="09xx xxx xxxx">
+            </div>
+            <div class="form-group">
+              <label>Default Delivery Address</label>
+              <input type="text" id="addressField" placeholder="House #, Street, Barangay, Angeles City">
+            </div>
+            <div class="form-group">
+              <label>New Password <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">(leave blank to keep current)</span></label>
+              <input type="password" id="newPassword" placeholder="Min. 4 characters">
+            </div>
+            <button type="submit" class="btn-save">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: order history -->
+    <div class="card" style="min-height:400px">
+      <div class="card-head"><span>📦</span><h3>Order History</h3></div>
+      <div class="card-body">
+        <div class="history-toolbar">
+          <div class="filter-tabs" id="filterTabs">
+            <button class="ftab active" data-filter="all">All</button>
+            <button class="ftab" data-filter="Pending">Pending</button>
+            <button class="ftab" data-filter="Processing">Processing</button>
+            <button class="ftab" data-filter="Delivered">Delivered</button>
+            <button class="ftab" data-filter="Cancelled">Cancelled</button>
+          </div>
+        </div>
+        <div id="orderList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Ces Luscious Foods · Sweetness for every occasion · Angeles City, PH</footer>
+
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal">
+    <div class="modal-icon">❓</div>
+    <h3>Cancel Order</h3>
+    <p>Are you sure you want to cancel this order? This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="modal-yes" id="confirmYes">Yes, Cancel</button>
+      <button class="modal-no" id="confirmNo">Keep It</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Helpers ──
+  function getOrders()   { return JSON.parse(localStorage.getItem('ces_orders') || '[]'); }
+  function saveOrders(o) { localStorage.setItem('ces_orders', JSON.stringify(o)); }
+  function getCart()     { return JSON.parse(localStorage.getItem('ces_cart') || '[]'); }
+  function getUsers()    { return JSON.parse(localStorage.getItem('ces_users') || '[]'); }
+  function saveUsers(u)  { localStorage.setItem('ces_users', JSON.stringify(u)); }
+
+  // Resolve legacy field names (orders placed before the fix had different keys)
+  function oDate(o)  { return o.orderDate || o.date || null; }
+  function oName(o)  { return o.customerName || o.customer || ''; }
+  function oNotes(o) { return o.addonNotes || o.notes || ''; }
+  function oPhone(o) { return o.phone || ''; }
+  function oAddr(o)  { return o.address || ''; }
+
+  function fmtDateTime(val) {
+    if (!val) return 'Date unavailable';
+    const d = new Date(val);
+    if (isNaN(d)) return 'Date unavailable';
+    return d.toLocaleDateString('en-PH', { month:'short', day:'numeric', year:'numeric' })
+      + ' · ' + d.toLocaleTimeString('en-PH', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function showToast(msg, type = 'info') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.className = 'toast'; }, 2800);
+  }
+
+  function initials(name) {
+    if (!name) return '?';
+    return name.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  function statusBadge(status) {
+    const cls = { Pending:'badge-pending', Processing:'badge-processing', Delivered:'badge-delivered', Cancelled:'badge-cancelled' };
+    return `<span class="status-badge ${cls[status] || ''}">${status || 'Unknown'}</span>`;
+  }
+
+  // ── Auth guard ──
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  if (!currentUser) {
+    setTimeout(() => { window.location.href = 'login.html'; }, 800);
+  }
+
+  let activeFilter    = 'all';
+  let pendingCancelId = null;
+
+  // ── My orders matcher:
+  // Priority 1 — userId matches (set by checkout going forward)
+  // Priority 2 — customerName matches current name (legacy, before userId was saved)
+  // We collect all matched IDs once and cache them to stay consistent across renames.
+  function getMyOrders() {
+    const all = getOrders();
+    return all.filter(o =>
+      (currentUser && o.userId === currentUser.id) ||
+      (currentUser && oName(o) && oName(o).toLowerCase() === currentUser.name.toLowerCase())
+    );
+  }
+
+  // ── Cart badge ──
+  function updateCartBadge() {
+    const count = getCart().reduce((s, i) => s + (i.quantity || 0), 0);
+    const el = document.getElementById('cartCount');
+    if (el) el.textContent = count;
+  }
+
+  // ── Load profile ──
+  function loadProfile() {
+    if (!currentUser) return;
+    const users = getUsers();
+    const user  = users.find(u => u.id === currentUser.id) || currentUser;
+
+    document.getElementById('avatarInitials').textContent = initials(user.name);
+    document.getElementById('avatarRole').textContent     = user.role === 'admin' ? 'Admin' : 'Customer';
+    document.getElementById('displayName').textContent    = user.name  || '—';
+    document.getElementById('displayEmail').textContent   = user.email || '—';
+    document.getElementById('fullName').value     = user.name    || '';
+    document.getElementById('emailField').value   = user.email   || '';
+    document.getElementById('phoneField').value   = user.phone   || '';
+    document.getElementById('addressField').value = user.address || '';
+  }
+
+  // ── Quick stats — recalculated fresh every time ──
+  function loadStats() {
+    const myOrders  = getMyOrders();
+    const delivered = myOrders.filter(o => o.status === 'Delivered');
+    // Spent = sum of ALL delivered orders (subtotal + deliveryFee = total)
+    const spent     = delivered.reduce((s, o) => s + (o.total || 0), 0);
+
+    document.getElementById('qsTotal').textContent     = myOrders.length;
+    document.getElementById('qsDelivered').textContent = delivered.length;
+    document.getElementById('qsSpent').textContent     = '₱' + spent.toLocaleString();
+  }
+
+  // ── Render order history ──
+  function renderOrders() {
+    let myOrders = getMyOrders();
+
+    if (activeFilter !== 'all') {
+      myOrders = myOrders.filter(o => o.status === activeFilter);
+    }
+
+    // Sort newest first
+    myOrders.sort((a, b) => {
+      const da = oDate(a) ? new Date(oDate(a)) : new Date(0);
+      const db = oDate(b) ? new Date(oDate(b)) : new Date(0);
+      return db - da;
+    });
+
+    const list = document.getElementById('orderList');
+    if (!list) return;
+
+    if (!myOrders.length) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <h4>${activeFilter === 'all' ? 'No orders yet' : 'No ' + activeFilter + ' orders'}</h4>
+          <p>${activeFilter === 'all' ? 'Your orders will appear here once you place one.' : 'Try a different filter above.'}</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = myOrders.map(order => {
+      const canCancel = order.status === 'Pending' || order.status === 'Processing';
+      const notes     = oNotes(order);
+      const addr      = oAddr(order);
+      const ref       = order.paymentReference || '';
+      const statusCls = (order.status || '').toLowerCase();
+
+      // Item rows
+      const itemsHtml = (order.items || []).length
+        ? (order.items || []).map(i =>
+            `<div class="order-item-row">
+              <span>${i.icon || '🍰'} ${i.name} ×${i.quantity}</span>
+              <span class="order-item-price">₱${((i.price||0)*(i.quantity||1)).toLocaleString()}</span>
+            </div>`).join('')
+        : '<span style="color:var(--text-muted)">No items on record</span>';
+
+      return `
+        <div class="order-card ${statusCls}">
+          <div class="order-top">
+            <div class="order-id-date">
+              <span class="order-id">#${String(order.id).slice(-8)}</span>
+              <span class="order-date">${fmtDateTime(oDate(order))}</span>
+            </div>
+            <div class="order-right">
+              ${statusBadge(order.status)}
+              <span class="pay-badge">${(order.paymentMethod || 'COD').toUpperCase()}</span>
+              <span class="order-total ${order.status === 'Delivered' ? 'green' : ''}">
+                ₱${(order.total || 0).toLocaleString()}
+              </span>
+              ${canCancel
+                ? `<button class="cancel-btn" onclick="askCancel(${order.id})">Cancel</button>`
+                : `<button class="cancel-btn" disabled>${order.status === 'Cancelled' ? 'Cancelled' : 'Cannot Cancel'}</button>`}
+            </div>
+          </div>
+
+          <div class="order-items-list">${itemsHtml}</div>
+
+          <div class="order-totals">
+            <div class="ot-row"><span>Subtotal</span><span class="ot-val">₱${(order.subtotal||0).toLocaleString()}</span></div>
+            <div class="ot-row"><span>Delivery fee</span><span class="ot-val">₱${(order.deliveryFee||0).toLocaleString()}</span></div>
+            <div class="ot-row grand"><span>Total</span><span class="ot-val">₱${(order.total||0).toLocaleString()}</span></div>
+          </div>
+
+          ${notes ? `<div class="order-notes">📝 "${notes}"</div>` : ''}
+
+          <div class="order-footer">
+            <span class="order-addr">${addr ? '📍 ' + addr : ''}</span>
+            ${ref ? `<span class="order-ref">✅ GCash Ref: ${ref}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Cancel flow ──
+  function askCancel(orderId) {
+    const orders = getOrders();
+    const order  = orders.find(o => o.id === orderId);
+    if (!order || (order.status !== 'Pending' && order.status !== 'Processing')) {
+      showToast('This order cannot be cancelled', 'error');
+      return;
+    }
+    pendingCancelId = orderId;
+    document.getElementById('cancelModal').classList.add('active');
+  }
+
+  function doCancel() {
+    if (!pendingCancelId) return;
+    const orders = getOrders();
+    const idx    = orders.findIndex(o => o.id === pendingCancelId);
+    if (idx === -1) { showToast('Order not found', 'error'); return; }
+    orders[idx].status = 'Cancelled';
+    saveOrders(orders);
+    pendingCancelId = null;
+    document.getElementById('cancelModal').classList.remove('active');
+    showToast('Order cancelled', 'info');
+    loadStats();
+    renderOrders();
+  }
+
+  document.getElementById('confirmYes').addEventListener('click', doCancel);
+  document.getElementById('confirmNo').addEventListener('click', () => {
+    pendingCancelId = null;
+    document.getElementById('cancelModal').classList.remove('active');
+  });
+  document.getElementById('cancelModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('cancelModal')) {
+      pendingCancelId = null;
+      document.getElementById('cancelModal').classList.remove('active');
+    }
+  });
+
+  // ── Filter tabs ──
+  document.getElementById('filterTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.ftab');
+    if (!btn) return;
+    document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderOrders();
+  });
+
+  // ── Save profile ──
+  document.getElementById('profileForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const name     = document.getElementById('fullName').value.trim();
+    const email    = document.getElementById('emailField').value.trim();
+    const phone    = document.getElementById('phoneField').value.trim();
+    const address  = document.getElementById('addressField').value.trim();
+    const password = document.getElementById('newPassword').value;
+
+    if (!name || !email) { showToast('Name and email are required', 'error'); return; }
+    if (password && password.length < 4) { showToast('Password must be at least 4 characters', 'error'); return; }
+
+    const users = getUsers();
+    const idx   = users.findIndex(u => u.id === currentUser.id);
+    if (idx !== -1) {
+      users[idx].name    = name;
+      users[idx].email   = email;
+      users[idx].phone   = phone;
+      users[idx].address = address;
+      if (password) users[idx].password = password;
+      saveUsers(users);
+    }
+
+    // Persist full updated user back into currentUser
+    const updated = { ...currentUser, name, email, phone, address };
+    localStorage.setItem('currentUser', JSON.stringify(updated));
+    // Update the in-memory ref so getMyOrders() still matches
+    Object.assign(currentUser, updated);
+
+    document.getElementById('newPassword').value = '';
+    showToast('Profile saved!', 'success');
+    loadProfile();
+    loadStats();
+    renderOrders(); // re-render in case name changed
+  });
+
+  // ── Logout ──
+  function logout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+  }
+
+  // ── Live refresh when orders change (e.g. admin updates status in another tab) ──
+  window.addEventListener('storage', e => {
+    if (e.key === 'ces_orders') { loadStats(); renderOrders(); }
+    if (e.key === 'ces_cart')   { updateCartBadge(); }
+  });
+
+  // ── Init ──
+  loadProfile();
+  loadStats();
+  renderOrders();
+  updateCartBadge();
+
+  window.askCancel = askCancel;
+  window.logout    = logout;
+</script>
+</body>
+</html>

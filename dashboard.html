@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Ces Luscious Foods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf8ff;
+      --surface: #ffffff;
+      --surface-2: #f3eeff;
+      --surface-3: #ece5ff;
+      --border: #e2d8f8;
+      --border-soft: #ede8fb;
+      --purple-deep: #4c1d95;
+      --purple-main: #6d28d9;
+      --purple-mid: #7c3aed;
+      --purple-light: #8b5cf6;
+      --purple-soft: #c4b5fd;
+      --purple-pale: #ede9fe;
+      --text-primary: #1c1033;
+      --text-secondary: #5b4d7a;
+      --text-muted: #9585b8;
+      --green: #059669;
+      --green-bg: #d1fae5;
+      --amber: #d97706;
+      --amber-bg: #fef3c7;
+      --blue: #2563eb;
+      --blue-bg: #dbeafe;
+      --red: #dc2626;
+      --shadow-sm: 0 1px 3px rgba(109,40,217,0.08);
+      --shadow-md: 0 4px 16px rgba(109,40,217,0.12);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+    .navbar {
+      background: var(--surface); border-bottom: 1px solid var(--border-soft);
+      padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--purple-main); display: flex; align-items: center; gap: 0.5rem; }
+    .logo-icon { font-size: 1.4rem; }
+    .admin-chip { background: var(--purple-main); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.18s; }
+    .nav-links a:hover { background: var(--purple-pale); color: var(--purple-main); }
+    .nav-links a.active { background: var(--purple-pale); color: var(--purple-main); font-weight: 600; }
+    .logout-btn { background: none; border: 1.5px solid var(--border); padding: 0.45rem 1.1rem; border-radius: 99px; color: var(--text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; transition: all 0.18s; }
+    .logout-btn:hover { border-color: var(--purple-light); color: var(--purple-main); background: var(--purple-pale); }
+
+    .container { max-width: 1320px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--purple-deep) 0%, #7c3aed 60%, #a78bfa 100%);
+      border-radius: 20px;
+      padding: 2.5rem 3rem;
+      margin-bottom: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -60px; right: 120px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .hero-greeting { color: rgba(255,255,255,0.7); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: white; margin-bottom: 0.5rem; }
+    .hero-sub { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    .hero-date { position: relative; z-index: 1; text-align: right; }
+    .hero-date .date-val { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; }
+    .hero-date .date-label { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 4px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border-soft);
+      border-radius: var(--radius); padding: 1.4rem 1.5rem;
+      transition: all 0.22s; position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-color, var(--purple-light)); opacity: 0.8;
+    }
+    .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .stat-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--icon-bg, var(--purple-pale));
+      color: var(--icon-color, var(--purple-main));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; margin-bottom: 0.9rem;
+    }
+    .stat-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .stat-value.green { color: var(--green); }
+    .stat-change { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    /* Grid layout */
+    .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .main-grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 900px) { .main-grid, .main-grid-3 { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border-soft);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--purple-deep); }
+    .card-badge { background: var(--purple-pale); color: var(--purple-main); font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+
+    .chart-wrap { position: relative; width: 100%; }
+
+    /* Order status breakdown */
+    .status-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .status-item { display: flex; align-items: center; gap: 0.75rem; }
+    .status-bar-wrap { flex: 1; height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+    .status-bar { height: 100%; border-radius: 99px; transition: width 0.8s ease; }
+    .status-name { font-size: 0.8rem; color: var(--text-secondary); width: 90px; flex-shrink: 0; }
+    .status-count { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); width: 24px; text-align: right; flex-shrink: 0; }
+
+    /* Recent orders */
+    .recent-table { width: 100%; border-collapse: collapse; }
+    .recent-table th { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); padding: 0 0 0.75rem; text-align: left; border-bottom: 1px solid var(--border-soft); }
+    .recent-table td { padding: 0.75rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--border-soft); vertical-align: middle; }
+    .recent-table tr:last-child td { border-bottom: none; }
+    .order-id-sm { font-weight: 700; color: var(--purple-main); font-size: 0.78rem; }
+    .badge-sm { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+    .badge-pending { background: var(--amber-bg); color: var(--amber); }
+    .badge-processing { background: var(--blue-bg); color: var(--blue); }
+    .badge-delivered { background: var(--green-bg); color: var(--green); }
+    .badge-cancelled { background: #fee2e2; color: var(--red); }
+
+    /* Quick actions */
+    .actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .action-card {
+      background: var(--surface-2); border: 1px solid var(--border-soft);
+      border-radius: var(--radius); padding: 1.25rem;
+      text-decoration: none; color: var(--text-primary);
+      transition: all 0.22s; display: flex; align-items: center; gap: 1rem;
+    }
+    .action-card:hover { background: var(--surface-3); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .action-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--purple-main); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .action-text h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+    .action-text p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* Top products */
+    .product-list { display: flex; flex-direction: column; gap: 0.85rem; }
+    .product-item { display: flex; align-items: center; gap: 0.75rem; }
+    .product-rank { width: 22px; height: 22px; border-radius: 6px; background: var(--purple-pale); color: var(--purple-main); font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .product-name { flex: 1; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
+    .product-sales { font-size: 0.82rem; font-weight: 700; color: var(--text-primary); }
+
+    /* Low stock warning */
+    .low-stock-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .low-stock-item { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 0.9rem; background: var(--surface-2); border-radius: 8px; border: 1px solid var(--border-soft); }
+    .low-stock-name { font-size: 0.85rem; font-weight: 500; }
+    .stock-badge { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+    .stock-critical { background: #fee2e2; color: var(--red); }
+    .stock-low { background: var(--amber-bg); color: var(--amber); }
+    .stock-ok { background: var(--green-bg); color: var(--green); }
+
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">
+    <span class="logo-icon">🍰</span>
+    Ces Luscious Foods
+    <span class="admin-chip">Admin</span>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="inventory.html">Inventory</a>
+    <a href="sales.html">Sales</a>
+    <a href="orders.html">Orders</a>
+  </div>
+  <button class="logout-btn" onclick="logout()">Log out</button>
+</nav>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-greeting">Good day, Admin 👋</div>
+      <div class="hero-title">Welcome back!</div>
+      <div class="hero-sub">Here's what's happening with Ces Luscious Foods today.</div>
+    </div>
+    <div class="hero-date">
+      <div class="hero-date .date-val" id="heroDate" style="font-family:'Playfair Display',serif;font-size:1.4rem;color:white;"></div>
+      <div class="hero-date .date-label" style="color:rgba(255,255,255,0.6);font-size:0.8rem;margin-top:4px;">Today</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <!-- Charts Row 1 -->
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Revenue by Payment Method</span>
+        <span class="card-badge" id="revBadge">—</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="revenueChart" role="img" aria-label="Revenue by payment method pie chart">Revenue breakdown by payment method.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Order Status Breakdown</span>
+      </div>
+      <div class="status-list" id="statusList"></div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="main-grid-3">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Recent Orders</span>
+        <a href="orders.html" style="font-size:0.8rem;color:var(--purple-main);text-decoration:none;font-weight:600;">View all →</a>
+      </div>
+      <table class="recent-table" id="recentOrders"></table>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Top Products</span>
+      </div>
+      <div class="product-list" id="topProducts"></div>
+    </div>
+  </div>
+
+  <!-- Row 3: Low Stock + Quick Actions -->
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Inventory Alerts</span>
+        <a href="inventory.html" style="font-size:0.8rem;color:var(--purple-main);text-decoration:none;font-weight:600;">Manage →</a>
+      </div>
+      <div class="low-stock-list" id="lowStockList"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Quick Actions</span>
+      </div>
+      <div class="actions-grid">
+        <a href="inventory.html" class="action-card">
+          <div class="action-icon">📦</div>
+          <div class="action-text"><h4>Inventory</h4><p>Manage products</p></div>
+        </a>
+        <a href="orders.html" class="action-card">
+          <div class="action-icon">🛒</div>
+          <div class="action-text"><h4>Orders</h4><p>Update statuses</p></div>
+        </a>
+        <a href="sales.html" class="action-card">
+          <div class="action-icon">📊</div>
+          <div class="action-text"><h4>Sales</h4><p>View reports</p></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  if (!currentUser || currentUser.role !== 'admin') window.location.href = 'login.html';
+
+  function getProducts() { return JSON.parse(localStorage.getItem('ces_products') || '[]'); }
+  function getOrders() { return JSON.parse(localStorage.getItem('ces_orders') || '[]'); }
+
+  function logout() { localStorage.removeItem('currentUser'); window.location.href = 'login.html'; }
+
+  // Date
+  const now = new Date();
+  document.getElementById('heroDate').textContent = now.toLocaleDateString('en-PH', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  function renderAll() {
+    const products = getProducts();
+    const orders = getOrders();
+    const delivered = orders.filter(o => o.status === 'Delivered');
+    const revenue = delivered.reduce((s, o) => s + o.total, 0);
+    const totalStock = products.reduce((s, p) => s + (p.stock || 0), 0);
+
+    // Stats cards
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card" style="--accent-color:#059669">
+        <div class="stat-icon" style="--icon-bg:#d1fae5;--icon-color:#059669">💰</div>
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value green">₱${revenue.toLocaleString()}</div>
+        <div class="stat-change">Delivered orders only</div>
+      </div>
+      <div class="stat-card" style="--accent-color:#7c3aed">
+        <div class="stat-icon">📋</div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value">${orders.length}</div>
+        <div class="stat-change">${orders.filter(o=>o.status==='Pending').length} pending action</div>
+      </div>
+      <div class="stat-card" style="--accent-color:#2563eb">
+        <div class="stat-icon" style="--icon-bg:#dbeafe;--icon-color:#2563eb">🧁</div>
+        <div class="stat-label">Products</div>
+        <div class="stat-value">${products.length}</div>
+        <div class="stat-change">${products.filter(p=>p.stock<20).length} low stock items</div>
+      </div>
+      <div class="stat-card" style="--accent-color:#d97706">
+        <div class="stat-icon" style="--icon-bg:#fef3c7;--icon-color:#d97706">📦</div>
+        <div class="stat-label">Stock Units</div>
+        <div class="stat-value">${totalStock}</div>
+        <div class="stat-change">Across all products</div>
+      </div>
+    `;
+
+    // Revenue by payment method (doughnut)
+    const codRevenue = orders.filter(o => o.paymentMethod === 'cod').reduce((s, o) => s + o.total, 0);
+    const gcashRevenue = orders.filter(o => o.paymentMethod === 'gcash').reduce((s, o) => s + o.total, 0);
+    document.getElementById('revBadge').textContent = `₱${(codRevenue + gcashRevenue).toLocaleString()} total`;
+
+    if (window._revChart) window._revChart.destroy();
+    window._revChart = new Chart(document.getElementById('revenueChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Cash on Delivery', 'GCash'],
+        datasets: [{
+          data: [codRevenue, gcashRevenue],
+          backgroundColor: ['#7c3aed', '#a78bfa'],
+          borderColor: ['#ffffff', '#ffffff'],
+          borderWidth: 3,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '68%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ₱${ctx.parsed.toLocaleString()} (${Math.round(ctx.parsed / (codRevenue + gcashRevenue || 1) * 100)}%)`
+            }
+          }
+        }
+      }
+    });
+
+    // Custom legend
+    const legendHtml = `
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:12px;color:var(--text-secondary)">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#7c3aed;display:inline-block"></span>COD ₱${codRevenue.toLocaleString()}</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block"></span>GCash ₱${gcashRevenue.toLocaleString()}</span>
+      </div>`;
+    document.getElementById('revenueChart').closest('.card').insertAdjacentHTML('beforeend', legendHtml);
+
+    // Status breakdown
+    const statuses = ['Pending', 'Processing', 'Delivered', 'Cancelled'];
+    const colors = { Pending: '#d97706', Processing: '#2563eb', Delivered: '#059669', Cancelled: '#dc2626' };
+    const statusCounts = {};
+    statuses.forEach(s => { statusCounts[s] = orders.filter(o => o.status === s).length; });
+    const maxCount = Math.max(...Object.values(statusCounts), 1);
+
+    document.getElementById('statusList').innerHTML = statuses.map(s => `
+      <div class="status-item">
+        <span class="status-name">${s}</span>
+        <div class="status-bar-wrap">
+          <div class="status-bar" style="width:${Math.round(statusCounts[s] / maxCount * 100)}%;background:${colors[s]}"></div>
+        </div>
+        <span class="status-count">${statusCounts[s]}</span>
+      </div>
+    `).join('');
+
+    // Recent orders (last 5)
+    const recent = [...orders].sort((a, b) => b.id - a.id).slice(0, 5);
+    const badgeMap = { Pending: 'badge-pending', Processing: 'badge-processing', Delivered: 'badge-delivered', Cancelled: 'badge-cancelled' };
+    document.getElementById('recentOrders').innerHTML = `
+      <thead><tr>
+        <th>Order</th><th>Customer</th><th>Total</th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        ${recent.length === 0 ? '<tr><td colspan="4" style="color:var(--text-muted);padding:1rem 0;font-size:0.85rem;">No orders yet</td></tr>' :
+          recent.map(o => `
+            <tr>
+              <td><span class="order-id-sm">#${String(o.id).slice(-6)}</span></td>
+              <td style="color:var(--text-secondary)">${o.customerName}</td>
+              <td><strong>₱${o.total}</strong></td>
+              <td><span class="badge-sm ${badgeMap[o.status] || ''}">${o.status}</span></td>
+            </tr>`).join('')}
+      </tbody>`;
+
+    // Top products by order appearance
+    const productCounts = {};
+    orders.forEach(o => {
+      o.items.forEach(item => {
+        productCounts[item.name] = (productCounts[item.name] || 0) + item.quantity;
+      });
+    });
+    const sorted = Object.entries(productCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    document.getElementById('topProducts').innerHTML = sorted.length === 0
+      ? '<p style="color:var(--text-muted);font-size:0.85rem;">No order data yet</p>'
+      : sorted.map(([name, qty], i) => `
+          <div class="product-item">
+            <span class="product-rank">${i + 1}</span>
+            <span class="product-name">${name}</span>
+            <span class="product-sales">${qty} sold</span>
+          </div>`).join('');
+
+    // Low stock alerts
+    const alerts = products.filter(p => p.stock < 30).sort((a, b) => a.stock - b.stock).slice(0, 5);
+    document.getElementById('lowStockList').innerHTML = alerts.length === 0
+      ? '<p style="color:var(--green);font-size:0.85rem;">✅ All products are well-stocked</p>'
+      : alerts.map(p => {
+          const cls = p.stock < 10 ? 'stock-critical' : p.stock < 20 ? 'stock-low' : 'stock-ok';
+          const label = p.stock < 10 ? '⚠️ Critical' : p.stock < 20 ? 'Low Stock' : 'Moderate';
+          return `
+            <div class="low-stock-item">
+              <span class="low-stock-name">${p.name}</span>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <span style="font-size:0.85rem;color:var(--text-muted)">${p.stock} units</span>
+                <span class="stock-badge ${cls}">${label}</span>
+              </div>
+            </div>`;
+        }).join('');
+  }
+
+  renderAll();
+  window.addEventListener('storage', renderAll);
+</script>
+</body>
+</html>

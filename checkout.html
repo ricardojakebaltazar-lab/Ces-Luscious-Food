@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Ces Luscious Foods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c0f2e;--ink-2:#3a1f5c;--ink-3:#6b5280;--ink-4:#a891c0;
+  --cream:#fdf8f2;--cream-2:#f5ede0;--cream-3:#ede0cc;
+  --plum:#4a1569;--plum-2:#6b2d94;--plum-3:#9b5bc4;--plum-pale:#f0e8f8;
+  --gold:#c8832a;--gold-pale:#fdf0dc;
+  --rose:#b83560;--rose-pale:#fce8ef;
+  --mint:#1e7a5a;--mint-pale:#e0f5ed;
+  --border:rgba(74,21,105,.1);--border-2:rgba(74,21,105,.18);
+  --shadow:0 2px 16px rgba(74,21,105,.08);--shadow-lg:0 8px 40px rgba(74,21,105,.15);
+  --r:18px;--r-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(253,248,242,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;transition:box-shadow .3s}
+.nav.scrolled{box-shadow:var(--shadow)}
+.nav-logo{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;color:var(--plum);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;text-decoration:none}
+.nav-logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--plum),var(--plum-2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(74,21,105,.3)}
+.nav-links{display:flex;gap:2px}
+.nav-links a{color:var(--ink-3);text-decoration:none;font-size:.82rem;font-weight:500;padding:.45rem .95rem;border-radius:99px;transition:all .18s}
+.nav-links a:hover,.nav-links a.active{color:var(--plum);background:var(--plum-pale)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.cart-btn{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:99px;padding:.48rem 1.15rem .48rem .9rem;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;position:relative;box-shadow:0 2px 12px rgba(74,21,105,.3)}
+.cart-btn:hover{transform:translateY(-2px)}
+.cart-badge{background:var(--rose);color:white;font-size:.6rem;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;position:absolute;top:-7px;right:-6px;border:2px solid var(--cream)}
+.logout-btn{background:none;border:1.5px solid var(--border-2);padding:.45rem 1.05rem;border-radius:99px;color:var(--ink-3);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;transition:all .18s}
+.logout-btn:hover{border-color:var(--plum-3);color:var(--plum)}
+
+/* PAGE LAYOUT */
+.page{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem;position:relative;z-index:1}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--ink-4);margin-bottom:.8rem}
+.breadcrumb a{color:var(--ink-3);text-decoration:none;transition:color .15s}
+.breadcrumb a:hover{color:var(--plum)}
+.page-title{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;margin-bottom:2rem}
+.page-title em{color:var(--plum);font-style:italic}
+
+/* STEP INDICATOR */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:2.2rem}
+.step-item{display:flex;align-items:center;gap:8px;flex:1}
+.step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;transition:all .2s}
+.step-num.done{background:var(--mint);color:white}
+.step-num.active{background:var(--plum);color:white;box-shadow:0 2px 12px rgba(74,21,105,.3)}
+.step-num.pending{background:var(--cream-2);color:var(--ink-4);border:1.5px solid var(--border-2)}
+.step-label{font-size:.78rem;font-weight:600;color:var(--ink-3)}
+.step-label.active{color:var(--plum)}
+.step-label.done{color:var(--mint)}
+.step-line{flex:1;height:1.5px;background:var(--border-2);margin:0 .5rem}
+.step-line.done{background:var(--mint)}
+
+.checkout-grid{display:grid;grid-template-columns:1fr 380px;gap:1.8rem;align-items:start}
+
+/* CARDS */
+.co-card{background:white;border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:1.2rem}
+.co-card:last-child{margin-bottom:0}
+.co-card-head{padding:1.2rem 1.6rem;border-bottom:1px solid var(--border);background:var(--cream);display:flex;align-items:center;gap:10px}
+.co-card-head h3{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em}
+.co-card-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.co-card-ico.plum{background:var(--plum-pale)}
+.co-card-ico.gold{background:var(--gold-pale)}
+.co-card-body{padding:1.4rem 1.6rem}
+
+/* ORDER ITEMS */
+.order-item{display:flex;align-items:center;gap:12px;padding:.7rem 0;border-bottom:1px solid var(--border)}
+.order-item:last-child{border-bottom:none}
+.oi-img{width:48px;height:48px;border-radius:10px;object-fit:cover;background:var(--cream-2);flex-shrink:0}
+.oi-info{flex:1;min-width:0}
+.oi-name{font-weight:600;font-size:.88rem;color:var(--ink)}
+.oi-qty{font-size:.75rem;color:var(--ink-4);margin-top:2px}
+.oi-price{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--plum);white-space:nowrap}
+
+/* PAYMENT OPTIONS */
+.pay-option{
+  display:flex;align-items:center;gap:12px;
+  padding:1rem 1.2rem;border:1.5px solid var(--border-2);
+  border-radius:12px;margin-bottom:.75rem;
+  cursor:pointer;transition:all .2s;background:white;
+}
+.pay-option:hover{border-color:var(--plum-3);background:var(--plum-pale)}
+.pay-option.selected{border-color:var(--plum-2);background:var(--plum-pale);box-shadow:0 2px 12px rgba(74,21,105,.12)}
+.pay-option input[type=radio]{accent-color:var(--plum-2);width:17px;height:17px;cursor:pointer;flex-shrink:0}
+.pay-option-content{flex:1}
+.pay-option-title{font-size:.88rem;font-weight:700;color:var(--ink)}
+.pay-option-sub{font-size:.74rem;color:var(--ink-3);margin-top:2px}
+.pay-option-tag{font-size:.65rem;font-weight:700;padding:.18rem .55rem;border-radius:99px;margin-left:auto;flex-shrink:0}
+.pay-option-tag.recommended{background:var(--gold-pale);color:var(--gold);border:1px solid rgba(200,131,42,.2)}
+
+/* DELIVERY INFO */
+.info-row{display:flex;flex-direction:column;gap:.7rem}
+.info-field label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-4);margin-bottom:.4rem}
+.info-field input,.info-field textarea{width:100%;background:var(--cream);border:1.5px solid var(--border-2);border-radius:10px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--ink);outline:none;transition:border-color .2s;resize:none}
+.info-field input:focus,.info-field textarea:focus{border-color:var(--plum-3);background:white}
+.info-field input::placeholder,.info-field textarea::placeholder{color:var(--ink-4)}
+
+/* ORDER SUMMARY CARD (sticky) */
+.summary-card{background:white;border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;position:sticky;top:80px}
+.summary-head{padding:1.2rem 1.6rem;border-bottom:1px solid var(--border);background:var(--cream)}
+.summary-head h3{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em}
+.summary-body{padding:1.3rem 1.6rem}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.85rem;color:var(--ink-3)}
+.sum-row:last-of-type{border-bottom:none}
+.sum-row.total{padding-top:.8rem;border-top:2px solid var(--border-2);border-bottom:none;margin-top:.3rem}
+.sum-row .lbl{font-weight:500}
+.sum-row .val{font-weight:700;color:var(--ink)}
+.sum-row.total .lbl{font-size:.95rem;font-weight:700;color:var(--ink)}
+.sum-row.total .val{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:700;color:var(--plum)}
+.place-btn{width:100%;background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:99px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.01em;cursor:pointer;transition:all .22s;box-shadow:0 4px 20px rgba(74,21,105,.3);margin-top:1rem}
+.place-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,21,105,.38)}
+.back-link{display:block;text-align:center;margin-top:.75rem;font-size:.8rem;font-weight:500;color:var(--ink-3);text-decoration:none;transition:color .15s}
+.back-link:hover{color:var(--plum)}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(28,15,46,.6);
+  backdrop-filter:blur(8px);
+  z-index:800;opacity:0;pointer-events:none;
+  transition:opacity .3s;
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:white;border-radius:24px;
+  padding:2.2rem;max-width:500px;width:100%;
+  box-shadow:0 24px 80px rgba(74,21,105,.25);
+  border:1px solid var(--border);
+  transform:translateY(40px) scale(.97);
+  transition:transform .32s cubic-bezier(.34,1.56,.64,1);
+  max-height:90vh;overflow-y:auto;
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-ico{font-size:2.8rem;text-align:center;margin-bottom:.5rem}
+.modal-title{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--ink);text-align:center;letter-spacing:-.02em;margin-bottom:.4rem}
+.modal-sub{font-size:.83rem;color:var(--ink-3);text-align:center;line-height:1.6;margin-bottom:1.5rem}
+.modal-step{display:none}
+.modal-step.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Modal GCash details */
+.gcash-box{background:var(--cream);border-radius:12px;padding:1.2rem;border:1px solid var(--border);margin-bottom:1.2rem}
+.gcash-row{display:flex;align-items:center;gap:10px;margin-bottom:.75rem}
+.gcash-row:last-child{margin-bottom:0}
+.gcash-row label{font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--plum);min-width:90px;flex-shrink:0}
+.gcash-row input{flex:1;background:white;border:1.5px solid var(--border-2);border-radius:99px;padding:.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--ink);outline:none;transition:border-color .2s}
+.gcash-row input:focus{border-color:var(--plum-3)}
+.gcash-amount{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;color:var(--plum);text-align:center;margin:1rem 0 .5rem}
+
+/* Addons choice */
+.choice-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.5rem}
+.btn-yes{background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:12px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 14px rgba(74,21,105,.28)}
+.btn-yes:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,21,105,.35)}
+.btn-no{background:var(--cream);border:1.5px solid var(--border-2);color:var(--ink-3);border-radius:12px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-no:hover{background:var(--plum-pale);border-color:var(--plum-3);color:var(--plum)}
+
+/* Notes textarea */
+.notes-textarea{width:100%;min-height:110px;padding:.9rem 1rem;border:1.5px solid var(--border-2);border-radius:12px;background:var(--cream);font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--ink);resize:vertical;outline:none;transition:all .2s}
+.notes-textarea:focus{border-color:var(--plum-3);background:white}
+.notes-label{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-4);display:block;margin-bottom:.5rem}
+
+/* Confirm summary */
+.confirm-box{background:var(--cream);border-radius:12px;padding:1.2rem;border:1px solid var(--border);margin-bottom:1.2rem;font-size:.85rem}
+.confirm-box h4{font-weight:700;color:var(--plum);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}
+.confirm-box p{color:var(--ink-3);margin-bottom:.8rem;line-height:1.6}
+.confirm-box p:last-child{margin-bottom:0}
+
+/* Modal action buttons */
+.modal-actions{display:flex;flex-direction:column;gap:8px;margin-top:1rem}
+.modal-btn-primary{background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:99px;padding:.85rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .22s;box-shadow:0 4px 18px rgba(74,21,105,.28);width:100%}
+.modal-btn-primary:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(74,21,105,.36)}
+.modal-btn-secondary{background:none;border:1.5px solid var(--border-2);color:var(--ink-3);border-radius:99px;padding:.78rem;font-family:'DM Sans',sans-serif;font-size:.87rem;font-weight:600;cursor:pointer;transition:all .18s;width:100%}
+.modal-btn-secondary:hover{border-color:var(--plum-3);color:var(--plum);background:var(--plum-pale)}
+.modal-btn-back{background:none;border:none;color:var(--ink-4);font-family:'DM Sans',sans-serif;font-size:.8rem;cursor:pointer;padding:.4rem;transition:color .15s;text-align:center;width:100%}
+.modal-btn-back:hover{color:var(--plum)}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:white;padding:.7rem 1.5rem;border-radius:99px;font-size:.82rem;font-weight:500;z-index:9999;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--mint)}
+.toast.error{background:var(--rose)}
+
+footer{margin-top:3rem;padding:1.8rem;border-top:1px solid var(--border);text-align:center;font-size:.78rem;color:var(--ink-4);font-weight:500;position:relative;z-index:1}
+@media(max-width:860px){.checkout-grid{grid-template-columns:1fr}.summary-card{position:static}}
+@media(max-width:640px){.nav{padding:0 1rem}.nav-links{display:none}.page{padding:1.5rem 1rem}.page-title{font-size:1.7rem}}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="mainNav">
+  <a href="home.html" class="nav-logo">
+    <div class="nav-logo-mark">🍰</div>
+    Ces Luscious Foods
+  </a>
+  <div class="nav-links">
+    <a href="home.html">Home</a>
+    <a href="cart.html">My Bag</a>
+    <a href="checkout.html" class="active">Checkout</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="window.location.href='cart.html'">
+      🛒 Bag <span class="cart-badge" id="cartCount">0</span>
+    </button>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="breadcrumb">
+    <a href="home.html">Home</a><span>›</span>
+    <a href="cart.html">Cart</a><span>›</span>
+    <span>Checkout</span>
+  </div>
+  <h1 class="page-title">Complete Your <em>Order</em></h1>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps">
+    <div class="step-item">
+      <div class="step-num done">✓</div>
+      <span class="step-label done">Cart</span>
+      <div class="step-line done"></div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">2</div>
+      <span class="step-label active">Details</span>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-item">
+      <div class="step-num pending">3</div>
+      <span class="step-label">Confirm</span>
+    </div>
+  </div>
+
+  <div class="checkout-grid">
+    <!-- LEFT -->
+    <div>
+      <!-- ORDER ITEMS -->
+      <div class="co-card">
+        <div class="co-card-head">
+          <div class="co-card-ico plum">🍰</div>
+          <h3>Your Order</h3>
+        </div>
+        <div class="co-card-body" id="orderItems">
+          <p style="color:var(--ink-3);font-size:.85rem">Loading order…</p>
+        </div>
+      </div>
+
+      <!-- DELIVERY INFO -->
+      <div class="co-card">
+        <div class="co-card-head">
+          <div class="co-card-ico gold">🚚</div>
+          <h3>Delivery Details</h3>
+        </div>
+        <div class="co-card-body">
+          <div class="info-row">
+            <div class="info-field">
+              <label>Full Name</label>
+              <input type="text" id="custName" placeholder="Your full name">
+            </div>
+            <div class="info-field">
+              <label>Phone Number</label>
+              <input type="tel" id="custPhone" placeholder="09xx xxx xxxx">
+            </div>
+            <div class="info-field">
+              <label>Delivery Address</label>
+              <textarea id="custAddress" rows="2" placeholder="House/Unit #, Street, Barangay, Angeles City"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT METHOD -->
+      <div class="co-card">
+        <div class="co-card-head">
+          <div class="co-card-ico plum">💳</div>
+          <h3>Payment Method</h3>
+        </div>
+        <div class="co-card-body">
+          <div class="pay-option selected" data-method="cod" onclick="selectPayment(this,'cod')">
+            <input type="radio" name="payment" value="cod" checked>
+            <div class="pay-option-content">
+              <div class="pay-option-title">💵 Cash on Delivery</div>
+              <div class="pay-option-sub">Pay when your order arrives</div>
+            </div>
+            <span class="pay-option-tag recommended">Recommended</span>
+          </div>
+          <div class="pay-option" data-method="gcash" onclick="selectPayment(this,'gcash')">
+            <input type="radio" name="payment" value="gcash">
+            <div class="pay-option-content">
+              <div class="pay-option-title">📱 GCash / E-Wallet</div>
+              <div class="pay-option-sub">Send payment before delivery</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SUMMARY -->
+    <div class="summary-card">
+      <div class="summary-head"><h3>Summary</h3></div>
+      <div class="summary-body">
+        <div class="sum-row"><span class="lbl">Subtotal</span><span class="val" id="subVal">₱0</span></div>
+        <div class="sum-row"><span class="lbl">Delivery fee</span><span class="val" id="delVal">₱50</span></div>
+        <div class="sum-row total"><span class="lbl">Total</span><span class="val" id="totVal">₱0</span></div>
+        <button class="place-btn" onclick="openModal()">Review & Confirm →</button>
+        <a href="cart.html" class="back-link">← Back to cart</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Ces Luscious Foods · Sweetness for every occasion · Angeles City, PH</footer>
+<div class="toast" id="toast"></div>
+
+<!-- ORDER CONFIRMATION MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+
+    <!-- STEP: GCash Details (if gcash selected) -->
+    <div class="modal-step" id="stepGcash">
+      <div class="modal-ico">📱</div>
+      <div class="modal-title">GCash Payment</div>
+      <div class="modal-sub">Review and confirm your GCash details before proceeding.</div>
+      <div class="gcash-amount" id="gcashAmtDisplay">₱0</div>
+      <div class="gcash-box">
+        <div class="gcash-row">
+          <label>Number</label>
+          <input type="text" id="gcashNum" value="0912 345 6789">
+        </div>
+        <div class="gcash-row">
+          <label>Account</label>
+          <input type="text" id="gcashName" value="Ces Luscious Foods">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn-primary" onclick="gcashNext()">Confirm Details →</button>
+        <button class="modal-btn-secondary" onclick="closeModal()">← Back</button>
+      </div>
+    </div>
+
+    <!-- STEP: Add-ons? -->
+    <div class="modal-step" id="stepAsk">
+      <div class="modal-ico">🍬</div>
+      <div class="modal-title">Any Special Requests?</div>
+      <div class="modal-sub">Add custom notes, extra toppings, or personalized instructions to your order.</div>
+      <div class="choice-btns">
+        <button class="btn-yes" onclick="goNotes()">✍️ Yes, add notes</button>
+        <button class="btn-no" onclick="skipNotes()">No thanks</button>
+      </div>
+    </div>
+
+    <!-- STEP: Write notes -->
+    <div class="modal-step" id="stepNotes">
+      <div class="modal-ico">✍️</div>
+      <div class="modal-title">Add Your Notes</div>
+      <div class="modal-sub">Special requests, add-ons, or any instructions for our kitchen.</div>
+      <label class="notes-label">Instructions / Notes</label>
+      <textarea class="notes-textarea" id="notesInput" placeholder="e.g. Extra sugar, no nuts, birthday message on packaging, specific delivery time…"></textarea>
+      <div class="modal-actions">
+        <button class="modal-btn-primary" onclick="notesNext()">Continue →</button>
+        <button class="modal-btn-back" onclick="backToAsk()">← Go back</button>
+      </div>
+    </div>
+
+    <!-- STEP: Final confirm -->
+    <div class="modal-step" id="stepConfirm">
+      <div class="modal-ico">✅</div>
+      <div class="modal-title">Confirm Your Order</div>
+      <div class="modal-sub">Everything look good? We'll get started right away.</div>
+      <div class="confirm-box" id="confirmSummary"></div>
+      <div class="modal-actions">
+        <button class="modal-btn-primary" onclick="placeOrder()">🎉 Place Order!</button>
+        <button class="modal-btn-secondary" onclick="editOrder()">✏️ Edit</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const DELIVERY_FEE = 50;
+let selectedPayment = 'cod';
+let addonNotes = '';
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2700);
+}
+
+const _user=JSON.parse(localStorage.getItem('currentUser')||'null');
+if(!_user)setTimeout(()=>window.location.href='login.html',200);
+
+let cart=JSON.parse(localStorage.getItem('checkoutCart')||'[]');
+if(!cart.length){
+  cart=JSON.parse(localStorage.getItem('ces_cart')||'[]');
+  if(cart.length)localStorage.setItem('checkoutCart',JSON.stringify(cart));
+}
+if(!cart.length){
+  showToast('Your cart is empty','error');
+  setTimeout(()=>window.location.href='shop.html',1500);
+}
+
+// Pre-fill name
+if(_user?.name)setTimeout(()=>{const n=document.getElementById('custName');if(n)n.value=_user.name},100);
+
+const subtotal=cart.reduce((s,i)=>s+i.price*i.quantity,0);
+const total=subtotal+DELIVERY_FEE;
+
+function updateNavBadge(){
+  const c=JSON.parse(localStorage.getItem('ces_cart')||'[]');
+  document.getElementById('cartCount').textContent=c.reduce((s,i)=>s+i.quantity,0);
+}
+
+function renderOrder(){
+  document.getElementById('subVal').textContent='₱'+subtotal.toLocaleString();
+  document.getElementById('delVal').textContent='₱'+DELIVERY_FEE;
+  document.getElementById('totVal').textContent='₱'+total.toLocaleString();
+
+  document.getElementById('orderItems').innerHTML=cart.map(item=>`
+    <div class="order-item">
+      <img class="oi-img" src="${item.image}" onerror="this.src='https://placehold.co/48/6b2d94/white?text=🍰'" alt="${item.name}">
+      <div class="oi-info">
+        <div class="oi-name">${item.name}</div>
+        <div class="oi-qty">× ${item.quantity} @ ₱${item.price.toLocaleString()}</div>
+      </div>
+      <div class="oi-price">₱${(item.price*item.quantity).toLocaleString()}</div>
+    </div>`).join('');
+}
+
+function selectPayment(el,method){
+  document.querySelectorAll('.pay-option').forEach(o=>{
+    o.classList.remove('selected');
+    o.querySelector('input').checked=false;
+  });
+  el.classList.add('selected');
+  el.querySelector('input').checked=true;
+  selectedPayment=method;
+}
+
+function validate(){
+  const name=document.getElementById('custName').value.trim();
+  const phone=document.getElementById('custPhone').value.trim();
+  const addr=document.getElementById('custAddress').value.trim();
+  if(!name){showToast('Please enter your name','error');return false}
+  if(!phone){showToast('Please enter your phone number','error');return false}
+  if(!addr){showToast('Please enter your delivery address','error');return false}
+  return true;
+}
+
+function openModal(){
+  if(!validate())return;
+  // Reset modal state
+  addonNotes='';
+  document.getElementById('notesInput').value='';
+  showStep(selectedPayment==='gcash'?'stepGcash':'stepAsk');
+  document.getElementById('gcashAmtDisplay').textContent='₱'+total.toLocaleString();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
+
+function showStep(id){
+  document.querySelectorAll('.modal-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function gcashNext(){
+  const num=document.getElementById('gcashNum').value.trim();
+  const name=document.getElementById('gcashName').value.trim();
+  if(!num||!name){showToast('Please fill in GCash details','error');return}
+  showStep('stepAsk');
+}
+
+function goNotes(){showStep('stepNotes')}
+function backToAsk(){showStep('stepAsk')}
+
+function skipNotes(){
+  addonNotes='';
+  buildSummary();
+  showStep('stepConfirm');
+}
+
+function notesNext(){
+  addonNotes=document.getElementById('notesInput').value.trim();
+  buildSummary();
+  showStep('stepConfirm');
+}
+
+function editOrder(){
+  if(addonNotes)showStep('stepNotes');
+  else showStep('stepAsk');
+}
+
+function buildSummary(){
+  const items=cart.map(i=>`${i.name} ×${i.quantity}`).join(', ');
+  const payLabel=selectedPayment==='gcash'
+    ?`GCash → ${document.getElementById('gcashNum').value}`
+    :'Cash on Delivery';
+  const name=document.getElementById('custName').value.trim();
+  const phone=document.getElementById('custPhone').value.trim();
+  const addr=document.getElementById('custAddress').value.trim();
+  document.getElementById('confirmSummary').innerHTML=`
+    <h4>🛍 Items</h4>
+    <p>${items}</p>
+    <h4>🚚 Delivery</h4>
+    <p>${name} · ${phone}<br>${addr}</p>
+    <h4>💳 Payment</h4>
+    <p>${payLabel}</p>
+    <h4>💰 Total</h4>
+    <p style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--plum)">₱${total.toLocaleString()}</p>
+    ${addonNotes?`<h4>✍️ Notes</h4><p>${escHtml(addonNotes)}</p>`:''}
+  `;
+}
+
+function escHtml(s){if(!s)return'';return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}
+
+function placeOrder(){
+  const orders=JSON.parse(localStorage.getItem('ces_orders')||'[]');
+  const newOrder={
+    id:Date.now(),
+    customerName:document.getElementById('custName').value.trim(),   // ← was: customer
+    phone:document.getElementById('custPhone').value.trim(),
+    address:document.getElementById('custAddress').value.trim(),
+    items:cart,
+    addonNotes:addonNotes,                                           // ← was: notes
+    subtotal,
+    deliveryFee:DELIVERY_FEE,
+    total,
+    paymentMethod:selectedPayment,
+    status:'Pending',
+    orderDate:new Date().toISOString()                               // ← was: date
+  };
+  if(selectedPayment==='gcash'){
+    newOrder.gcashNumber=document.getElementById('gcashNum').value.trim();
+    newOrder.gcashName=document.getElementById('gcashName').value.trim();
+    newOrder.paymentReference=document.getElementById('gcashNum').value.trim();
+    newOrder.paymentStatus='Awaiting Payment';
+  }
+  orders.push(newOrder);
+  localStorage.setItem('ces_orders',JSON.stringify(orders));
+  localStorage.setItem('pendingOrder',JSON.stringify(newOrder));
+  localStorage.removeItem('ces_cart');
+  localStorage.removeItem('checkoutCart');
+  closeModal();
+  showToast('🎉 Order placed!','success');
+  setTimeout(()=>{
+    window.location.href=selectedPayment==='gcash'?'payment.html':'home.html';
+  },1200);
+}
+
+function logout(){localStorage.removeItem('currentUser');window.location.href='login.html'}
+window.addEventListener('scroll',()=>document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>8));
+
+renderOrder();
+updateNavBadge();
+</script>
+</body>
+</html>

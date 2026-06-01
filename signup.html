@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | Ces Luscious Foods</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: #ffffff;  /* White background outside */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .signup-container {
+      max-width: 480px;
+      width: 100%;
+      background: #f5f0ff;  /* Soft purple inside the container */
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e8e0f0;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #2d1b4e;  /* Dark purple text */
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      color: #2d1b4e;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #6b4e8c;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.5px;
+    }
+
+    .input-group input {
+      width: 100%;
+      background: #ffffff;  /* White input background */
+      border: 1px solid #ddd0f0;
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+      color: #2d1b4e;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .input-group input::placeholder {
+      color: #b8a8d4;
+    }
+
+    .input-group input:focus {
+      border-color: #9b7bd9;
+      box-shadow: 0 0 0 3px rgba(108, 73, 184, 0.1);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: #8b6fd4;  /* Soft purple button */
+      border: none;
+      padding: 0.85rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+      margin-top: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: #7a5bc0;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b4e8c;
+      font-size: 0.85rem;
+    }
+
+    .login-link a {
+      color: #8b6fd4;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2d1b4e;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      z-index: 2200;
+      transition: opacity 0.2s;
+      opacity: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="logo">🍰 Ces Luscious Foods</div>
+    <h2>Create Account</h2>
+    
+    <form id="signupForm">
+      <div class="input-group">
+        <label>FULL NAME</label>
+        <input type="text" id="fullName" placeholder="Enter your full name" required>
+      </div>
+      
+      <div class="input-group">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" id="email" placeholder="you@example.com" required>
+      </div>
+      
+      <div class="input-group">
+        <label>ADDRESS</label>
+        <input type="text" id="address" placeholder="Street, City, Province" required>
+      </div>
+      
+      <div class="input-group">
+        <label>PHONE NUMBER</label>
+        <input type="tel" id="phone" placeholder="09123456789" required>
+      </div>
+      
+      <div class="input-group">
+        <label>PASSWORD</label>
+        <input type="password" id="password" placeholder="Create a password" required>
+      </div>
+      
+      <div class="input-group">
+        <label>CONFIRM PASSWORD</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+      </div>
+      
+      <button type="submit" class="btn-submit">Sign Up →</button>
+    </form>
+    
+    <div class="login-link">
+      Already have an account? <a href="login.html">Log in</a>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">✨</div>
+
+  <script>
+    let users = JSON.parse(localStorage.getItem('ces_users') || '[]');
+
+    function showMessage(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toast.style.background = isError ? '#d45c5c' : '#4a9e6b';
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    document.getElementById('signupForm').onsubmit = (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (!name || !email || !address || !phone || !password) {
+        showMessage('❌ Please fill in all fields', true);
+        return;
+      }
+
+      if (password !== confirm) {
+        showMessage('❌ Passwords do not match', true);
+        return;
+      }
+
+      if (password.length < 4) {
+        showMessage('🔐 Password must be at least 4 characters', true);
+        return;
+      }
+
+      if (users.find(u => u.email === email)) {
+        showMessage('⚠️ Email already registered', true);
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        address: address,
+        phone: phone,
+        password: password,
+        role: 'user',
+        createdAt: new Date().toISOString()
+      };
+
+      users.push(newUser);
+      localStorage.setItem('ces_users', JSON.stringify(users));
+      localStorage.setItem('currentUser', JSON.stringify({ id: newUser.id, name: newUser.name, email: newUser.email, role: 'user' }));
+
+      showMessage(`🎉 Welcome ${name}! Account created.`);
+      setTimeout(() => window.location.href = 'home.html', 1000);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCash Payment — Ces Luscious Foods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c0f2e;--ink-2:#3a1f5c;--ink-3:#6b5280;--ink-4:#a891c0;
+  --cream:#fdf8f2;--cream-2:#f5ede0;--cream-3:#ede0cc;
+  --plum:#4a1569;--plum-2:#6b2d94;--plum-3:#9b5bc4;--plum-pale:#f0e8f8;
+  --gold:#c8832a;--gold-pale:#fdf0dc;
+  --rose:#b83560;--rose-pale:#fce8ef;
+  --mint:#1e7a5a;--mint-pale:#e0f5ed;
+  --border:rgba(74,21,105,.1);--border-2:rgba(74,21,105,.18);
+  --shadow:0 2px 16px rgba(74,21,105,.08);--shadow-lg:0 8px 40px rgba(74,21,105,.15);
+  --r:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(253,248,242,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;transition:box-shadow .3s}
+.nav.scrolled{box-shadow:var(--shadow)}
+.nav-logo{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;color:var(--plum);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;text-decoration:none}
+.nav-logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--plum),var(--plum-2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(74,21,105,.3)}
+.nav-links{display:flex;gap:2px}
+.nav-links a{color:var(--ink-3);text-decoration:none;font-size:.82rem;font-weight:500;padding:.45rem .95rem;border-radius:99px;transition:all .18s}
+.nav-links a:hover,.nav-links a.active{color:var(--plum);background:var(--plum-pale)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.logout-btn{background:none;border:1.5px solid var(--border-2);padding:.45rem 1.05rem;border-radius:99px;color:var(--ink-3);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;transition:all .18s}
+.logout-btn:hover{border-color:var(--plum-3);color:var(--plum)}
+
+/* PAGE */
+.page{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.5rem;position:relative;z-index:1}
+
+/* PAYMENT CARD */
+.payment-card{
+  background:white;border-radius:28px;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;width:100%;max-width:480px;
+  animation:slideUp .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD HERO */
+.card-hero{
+  background:linear-gradient(145deg,#1c0836,#3a1060 50%,#6b2d94);
+  padding:2.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden;
+}
+.card-hero-orb{position:absolute;border-radius:50%;pointer-events:none}
+.card-hero-orb:nth-child(1){width:200px;height:200px;top:-80px;right:-60px;background:radial-gradient(circle,rgba(163,92,196,.3) 0%,transparent 70%)}
+.card-hero-orb:nth-child(2){width:120px;height:120px;bottom:-40px;left:-30px;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%)}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  padding:.3rem .9rem;border-radius:99px;
+  font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.85);margin-bottom:1.2rem;
+}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:#6dffc4;box-shadow:0 0 10px #6dffc4;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.card-hero h1{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:white;letter-spacing:-.02em;margin-bottom:.4rem}
+.card-hero p{font-size:.83rem;color:rgba(255,255,255,.6);line-height:1.6}
+
+/* QR AREA */
+.qr-area{
+  position:relative;z-index:1;
+  margin:1.5rem auto 0;
+  width:160px;height:160px;
+  background:white;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 32px rgba(0,0,0,.2);
+  border:3px solid rgba(255,255,255,.3);
+}
+
+/* CARD BODY */
+.card-body{padding:2rem}
+
+/* AMOUNT CHIP */
+.amount-chip{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--plum-pale);border:1.5px solid var(--border-2);
+  border-radius:14px;padding:1rem 1.2rem;margin-bottom:1.5rem;
+}
+.amount-chip .lbl{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-4)}
+.amount-chip .amt{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:700;color:var(--plum)}
+
+/* ACCOUNT DETAILS */
+.acct-box{background:var(--cream);border-radius:14px;padding:1.2rem;border:1px solid var(--border);margin-bottom:1.5rem}
+.acct-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);margin-bottom:.8rem;display:block}
+.acct-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.acct-row:last-child{margin-bottom:0}
+.acct-key{font-size:.8rem;font-weight:600;color:var(--ink-3)}
+.acct-val{font-size:.88rem;font-weight:700;color:var(--ink)}
+.copy-btn{
+  display:flex;align-items:center;gap:5px;
+  background:var(--plum-pale);border:1.5px solid var(--border-2);
+  color:var(--plum);border-radius:99px;
+  padding:.3rem .8rem;font-family:'DM Sans',sans-serif;
+  font-size:.72rem;font-weight:700;cursor:pointer;transition:all .18s;
+}
+.copy-btn:hover{background:var(--plum);color:white;border-color:var(--plum)}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin:1.2rem 0;color:var(--ink-4);font-size:.75rem;font-weight:600;letter-spacing:.05em}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border-2)}
+
+/* REF INPUT */
+.ref-label{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-4);display:block;margin-bottom:.5rem}
+.ref-input{
+  width:100%;background:var(--cream);
+  border:1.5px solid var(--border-2);border-radius:12px;
+  padding:.8rem 1.1rem;font-family:'DM Sans',sans-serif;
+  font-size:.9rem;color:var(--ink);outline:none;
+  transition:all .2s;
+}
+.ref-input:focus{border-color:var(--plum-3);background:white;box-shadow:0 0 0 3px rgba(74,21,105,.08)}
+.ref-input::placeholder{color:var(--ink-4)}
+.ref-hint{font-size:.72rem;color:var(--ink-4);margin-top:.4rem;display:block}
+
+/* ACTIONS */
+.actions{margin-top:1.4rem;display:flex;flex-direction:column;gap:10px}
+.confirm-btn{
+  width:100%;background:linear-gradient(135deg,var(--plum),var(--plum-2));
+  color:white;border:none;border-radius:99px;padding:.9rem;
+  font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;
+  cursor:pointer;transition:all .22s;
+  box-shadow:0 4px 20px rgba(74,21,105,.3);
+}
+.confirm-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,21,105,.38)}
+.confirm-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.back-btn{
+  width:100%;background:none;border:1.5px solid var(--border-2);
+  color:var(--ink-3);border-radius:99px;padding:.78rem;
+  font-family:'DM Sans',sans-serif;font-size:.87rem;font-weight:600;
+  cursor:pointer;transition:all .18s;text-decoration:none;display:block;text-align:center;
+}
+.back-btn:hover{border-color:var(--plum-3);color:var(--plum);background:var(--plum-pale)}
+
+/* SUCCESS STATE */
+.success-state{display:none;text-align:center;padding:1rem 0}
+.success-state.show{display:block;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.success-ico{font-size:4rem;margin-bottom:1rem;display:block}
+.success-state h2{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;color:var(--mint);letter-spacing:-.02em;margin-bottom:.5rem}
+.success-state p{font-size:.87rem;color:var(--ink-3);line-height:1.7;margin-bottom:1.5rem}
+.success-ref{
+  display:inline-block;
+  background:var(--mint-pale);border:1.5px solid rgba(30,122,90,.2);
+  color:var(--mint);border-radius:10px;
+  padding:.5rem 1.2rem;font-size:.85rem;font-weight:700;
+  margin-bottom:1.5rem;
+}
+
+/* No order warning */
+.no-order-warning {
+  background:#fef3c7;border:1.5px solid #fcd34d;border-radius:12px;
+  padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:.85rem;color:#92400e;font-weight:500;
+}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:white;padding:.7rem 1.5rem;border-radius:99px;font-size:.82rem;font-weight:500;z-index:9999;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--mint)}
+.toast.error{background:var(--rose)}
+
+footer{padding:1.5rem;border-top:1px solid var(--border);text-align:center;font-size:.78rem;color:var(--ink-4);font-weight:500;position:relative;z-index:1}
+
+@media(max-width:640px){
+  .nav{padding:0 1rem}.nav-links{display:none}
+  .page{padding:1.5rem 1rem;align-items:flex-start}
+  .payment-card{border-radius:20px}
+  .card-hero{padding:2rem 1.5rem 2.5rem}
+  .card-body{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="mainNav">
+  <a href="home.html" class="nav-logo">
+    <div class="nav-logo-mark">🍰</div>
+    Ces Luscious Foods
+  </a>
+  <div class="nav-links">
+    <a href="home.html">Home</a>
+    <a href="cart.html">My Bag</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="payment.html" class="active">Payment</a>
+  </div>
+  <div class="nav-right">
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="payment-card">
+    <!-- CARD HERO -->
+    <div class="card-hero">
+      <div class="card-hero-orb"></div>
+      <div class="card-hero-orb"></div>
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        Secure GCash Payment
+      </div>
+      <h1>📱 GCash Payment</h1>
+      <p>Scan the QR code or send to the account below, then enter your reference number to confirm.</p>
+      <!-- QR Code (decorative canvas) -->
+      <div class="qr-area">
+        <canvas id="qrCanvas" width="130" height="130"></canvas>
+      </div>
+    </div>
+
+    <!-- CARD BODY -->
+    <div class="card-body">
+
+      <!-- Success state (hidden initially) -->
+      <div class="success-state" id="successState">
+        <span class="success-ico">🎉</span>
+        <h2>Payment Confirmed!</h2>
+        <p>Thank you! Your payment has been received. We're preparing your order right now.</p>
+        <div class="success-ref" id="successRef">Ref: —</div>
+        <a href="home.html" class="confirm-btn" style="display:block;text-decoration:none;text-align:center">Back to Home →</a>
+      </div>
+
+      <!-- Payment form (shown initially) -->
+      <div id="payForm">
+
+        <!-- FIX: Warn if no pending order found -->
+        <div class="no-order-warning" id="noOrderWarn" style="display:none">
+          ⚠️ No pending order found. Please go back and place an order first.
+        </div>
+
+        <!-- Amount -->
+        <div class="amount-chip">
+          <div>
+            <div class="lbl">Amount Due</div>
+          </div>
+          <div class="amt" id="amountDisplay">₱0</div>
+        </div>
+
+        <!-- Account Details -->
+        <div class="acct-box">
+          <span class="acct-label">Send Payment To</span>
+          <div class="acct-row">
+            <span class="acct-key">GCash Number</span>
+            <span class="acct-val">0912 345 6789</span>
+          </div>
+          <div class="acct-row">
+            <span class="acct-key">Account Name</span>
+            <span class="acct-val">Ces Luscious Foods</span>
+          </div>
+          <div style="text-align:right;margin-top:.75rem">
+            <button class="copy-btn" onclick="copyNumber()">📋 Copy Number</button>
+          </div>
+        </div>
+
+        <div class="divider">then enter reference</div>
+
+        <!-- Reference Number -->
+        <div class="ref-section">
+          <label class="ref-label" for="refNum">GCash Reference Number</label>
+          <input class="ref-input" type="text" id="refNum" placeholder="e.g. 1234-5678-9012" maxlength="30">
+          <span class="ref-hint">Found in your GCash transaction history after sending.</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button class="confirm-btn" id="confirmBtn" onclick="confirmPayment()">Confirm Payment →</button>
+          <a href="home.html" class="back-btn">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Ces Luscious Foods · Sweetness for every occasion · Angeles City, PH</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Toast ──
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2700);
+}
+
+// ── Auth guard ──
+// FIX: Redirect to login if not logged in; handle gracefully
+const _user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+if (!_user) {
+  // Give a moment for the page to paint before redirecting
+  setTimeout(() => { window.location.href = 'login.html'; }, 300);
+}
+
+// ── Draw decorative QR pattern on canvas ──
+function drawQR(){
+  const c = document.getElementById('qrCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const s = 130, cs = 10, cols = s / cs;
+
+  let seed = 42;
+  function rand(){ seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
+
+  ctx.clearRect(0, 0, s, s);
+
+  for (let r = 0; r < cols; r++){
+    for (let col = 0; col < cols; col++){
+      const inCorner = (r < 3 && col < 3) || (r < 3 && col >= cols - 3) || (r >= cols - 3 && col < 3);
+      if (inCorner){
+        ctx.fillStyle = '#1c0f2e';
+        ctx.fillRect(col * cs + 1, r * cs + 1, cs - 2, cs - 2);
+      } else {
+        if (rand() > 0.55){
+          ctx.fillStyle = '#1c0f2e';
+          ctx.fillRect(col * cs + 1, r * cs + 1, cs - 2, cs - 2);
+        }
+      }
+    }
+  }
+
+  // White + dark inner squares for corner markers
+  [[1,1],[1,cols-2],[cols-2,1]].forEach(([r, c2]) => {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(c2 * cs + 2, r * cs + 2, cs - 4, cs - 4);
+    ctx.fillStyle = '#1c0f2e';
+    ctx.fillRect(c2 * cs + 3, r * cs + 3, cs - 6, cs - 6);
+  });
+}
+
+// ── Load pending order ──
+// FIX: Handle missing pendingOrder gracefully; also check ces_orders for a match
+function loadOrder(){
+  const pending = JSON.parse(localStorage.getItem('pendingOrder') || 'null');
+
+  if (!pending || !pending.total) {
+    // FIX: Show warning instead of broken UI
+    document.getElementById('noOrderWarn').style.display = 'block';
+    document.getElementById('amountDisplay').textContent = '—';
+    document.getElementById('confirmBtn').disabled = true;
+    return;
+  }
+
+  document.getElementById('amountDisplay').textContent = '₱' + pending.total.toLocaleString();
+}
+
+// ── Copy GCash number ──
+function copyNumber(){
+  const num = '09123456789';
+  navigator.clipboard.writeText(num)
+    .then(() => showToast('✓ GCash number copied!', 'success'))
+    .catch(() => showToast(num + ' — copy manually', 'success'));
+}
+
+// ── Confirm payment ──
+function confirmPayment(){
+  const ref = document.getElementById('refNum').value.trim();
+
+  if (!ref) {
+    showToast('Please enter your GCash reference number', 'error');
+    return;
+  }
+  if (ref.length < 6) {
+    showToast('Reference number seems too short', 'error');
+    return;
+  }
+
+  const pending = JSON.parse(localStorage.getItem('pendingOrder') || 'null');
+
+  if (!pending) {
+    showToast('No pending order found. Please place an order first.', 'error');
+    return;
+  }
+
+  // FIX: Update the matching order in ces_orders with payment reference + correct status
+  const orders = JSON.parse(localStorage.getItem('ces_orders') || '[]');
+  const idx = orders.findIndex(o => o.id === pending.id);
+
+  if (idx !== -1) {
+    orders[idx].paymentReference = ref;
+    orders[idx].paymentStatus   = 'Paid via GCash';
+    orders[idx].status          = 'Processing'; // GCash orders move to Processing after ref confirmed
+    localStorage.setItem('ces_orders', JSON.stringify(orders));
+  }
+
+  // Clean up
+  localStorage.removeItem('pendingOrder');
+  localStorage.removeItem('ces_cart');
+  localStorage.removeItem('checkoutCart');
+
+  // Show success
+  document.getElementById('payForm').style.display = 'none';
+  document.getElementById('successRef').textContent = 'Ref: ' + ref;
+  document.getElementById('successState').classList.add('show');
+  showToast('Payment confirmed! 🎉', 'success');
+}
+
+// ── Logout ──
+function logout(){
+  localStorage.removeItem('currentUser');
+  window.location.href = 'login.html';
+}
+
+// ── Sticky nav shadow ──
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 8);
+});
+
+// ── Init ──
+drawQR();
+loadOrder();
+</script>
+</body>
+</html>

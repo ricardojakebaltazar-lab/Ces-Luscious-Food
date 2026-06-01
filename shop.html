@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu | Ces Luscious Foods</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a0f2e;
+  --ink-2: #3d2b5e;
+  --ink-3: #7a6595;
+  --ink-4: #b8a8d0;
+  --bg: #fdf9f5;
+  --bg-2: #f5ede8;
+  --bg-3: #ede0f7;
+  --cream: #faf4ec;
+  --plum: #5b1f8a;
+  --plum-2: #7c35b5;
+  --plum-3: #a064d4;
+  --rose: #c2436d;
+  --gold: #d4933a;
+  --mint: #2d9e7a;
+  --surface: #ffffff;
+  --border: rgba(91,31,138,0.12);
+  --shadow: 0 2px 20px rgba(91,31,138,0.08);
+  --shadow-lg: 0 8px 40px rgba(91,31,138,0.14);
+  --r: 16px;
+  --r-sm: 10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+
+/* ── NAVBAR ── */
+.nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(253,248,242,0.93);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:64px;
+  transition:box-shadow .3s;
+}
+.nav.scrolled{box-shadow:var(--shadow)}
+.nav-logo{
+  font-family:'Fraunces',serif;
+  font-size:1.35rem;font-weight:600;
+  color:var(--plum);
+  display:flex;align-items:center;gap:10px;
+  letter-spacing:-.01em;text-decoration:none;
+}
+.nav-logo-mark{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--plum),var(--plum-2));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;
+  box-shadow:0 2px 8px rgba(74,21,105,.3);
+}
+.nav-links{display:flex;gap:2px}
+.nav-links a{
+  color:var(--ink-3);text-decoration:none;
+  font-size:.82rem;font-weight:500;letter-spacing:.01em;
+  padding:.45rem .95rem;border-radius:99px;
+  transition:all .18s;
+}
+.nav-links a:hover,.nav-links a.active{
+  color:var(--plum);background:var(--plum-pale);
+}
+.nav-right{display:flex;gap:10px;align-items:center}
+.cart-btn{display:flex;align-items:center;gap:8px;background:var(--plum);color:white;border:none;border-radius:99px;padding:.45rem 1.1rem .45rem .85rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:all .2s;position:relative}
+.cart-btn:hover{background:var(--ink-2)}
+.cart-badge{background:var(--rose);color:white;font-size:.6rem;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;position:absolute;top:-6px;right:-5px;border:2px solid var(--bg)}
+.logout-btn{background:none;border:1px solid var(--border);padding:.45rem 1rem;border-radius:99px;color:var(--ink-3);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;font-weight:500;transition:all .18s}
+.logout-btn:hover{border-color:var(--plum);color:var(--plum)}
+
+/* ── PAGE HEADER ── */
+.page-top{
+  padding:2.5rem 2.5rem 1rem;
+  display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.page-top h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.8rem;font-weight:600;color:var(--ink);
+}
+.page-top p{font-size:.85rem;color:var(--ink-3);margin-top:.3rem}
+
+/* ── TOOLBAR ── */
+.toolbar{
+  padding:0 2.5rem 1.5rem;
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+}
+.search-wrap{
+  display:flex;align-items:center;gap:10px;
+  background:white;border:1.5px solid var(--border);
+  border-radius:99px;padding:.45rem 1.1rem;
+  transition:border-color .18s;flex:1;max-width:320px;
+}
+.search-wrap:focus-within{border-color:var(--plum)}
+.search-wrap input{
+  border:none;outline:none;background:none;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:.85rem;color:var(--ink);width:100%;
+}
+.sort-select{
+  background:white;border:1.5px solid var(--border);
+  padding:.45rem 2rem .45rem 1rem;border-radius:99px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;
+  color:var(--ink-3);appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239585b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  cursor:pointer;outline:none;transition:border-color .18s;
+}
+.sort-select:focus{border-color:var(--plum)}
+.filter-pills{display:flex;gap:8px;flex-wrap:wrap}
+.fpill{
+  border:1.5px solid var(--border);background:white;
+  border-radius:99px;padding:.35rem .9rem;
+  font-size:.75rem;font-weight:600;color:var(--ink-3);
+  cursor:pointer;transition:all .15s;
+}
+.fpill:hover,.fpill.active{border-color:var(--plum);color:var(--plum);background:var(--bg-3)}
+.result-count{
+  font-size:.78rem;color:var(--ink-4);
+  padding:0 2.5rem .5rem 0;
+  width:100%;text-align:right;
+}
+
+/* ── PRODUCT GRID ── */
+.products-wrap{padding:0 2.5rem 3rem}
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.4rem;
+}
+.card{background:white;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .22s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:rgba(91,31,138,.25)}
+.card-img-wrap{position:relative;height:200px;overflow:hidden;background:var(--bg-2)}
+.card-img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.card:hover .card-img{transform:scale(1.05)}
+.card-badge{position:absolute;top:12px;left:12px;background:white;color:var(--plum);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .65rem;border-radius:99px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.card-badge.sold-out{background:var(--ink);color:white}
+.card-badge.low{background:var(--gold);color:white}
+.card-body{padding:1.2rem;flex:1;display:flex;flex-direction:column}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--ink);margin-bottom:.3rem}
+.card-desc{font-size:.78rem;color:var(--ink-3);line-height:1.5;flex:1;margin-bottom:.8rem}
+.stock-info{
+  font-size:.72rem;font-weight:600;
+  padding:.2rem .6rem;border-radius:99px;
+  display:inline-flex;align-items:center;gap:4px;
+  margin-bottom:.8rem;align-self:flex-start;
+}
+.stock-ok{background:rgba(45,158,122,.1);color:var(--mint)}
+.stock-low{background:rgba(212,147,58,.12);color:var(--gold)}
+.stock-out{background:rgba(194,67,109,.1);color:var(--rose)}
+.card-footer{display:flex;align-items:center;justify-content:space-between}
+.card-price{font-size:1.3rem;font-weight:700;color:var(--plum);font-family:'Cormorant Garamond',serif}
+.add-btn{display:flex;align-items:center;gap:6px;background:var(--plum);color:white;border:none;border-radius:99px;padding:.5rem 1.1rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .18s}
+.add-btn:hover{background:var(--ink-2);transform:translateY(-1px)}
+.add-btn:disabled{background:var(--ink-4);cursor:not-allowed;transform:none}
+.empty-state{padding:4rem;text-align:center;color:var(--ink-3);grid-column:1/-1}
+.empty-state .ico{font-size:3rem;margin-bottom:1rem;opacity:.4}
+
+/* ── CART DRAWER ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(26,15,46,.55);backdrop-filter:blur(4px);z-index:500;opacity:0;pointer-events:none;transition:opacity .25s}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;right:0;top:0;bottom:0;width:400px;max-width:95vw;background:white;z-index:501;transform:translateX(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(91,31,138,.12)}
+.cart-drawer.open{transform:translateX(0)}
+.cart-header{padding:1.4rem 1.6rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cart-header h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--ink)}
+.close-cart{width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;color:var(--ink-3)}
+.close-cart:hover{background:var(--bg-3);color:var(--plum)}
+.cart-items{flex:1;overflow-y:auto;padding:1.2rem 1.6rem;display:flex;flex-direction:column;gap:14px}
+.cart-item{display:flex;gap:12px;align-items:center;background:var(--bg);border-radius:12px;padding:.85rem}
+.cart-item-img{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--bg-2)}
+.cart-item-info{flex:1}
+.cart-item-name{font-weight:600;font-size:.88rem;color:var(--ink);margin-bottom:2px}
+.cart-item-price{font-size:.8rem;color:var(--plum);font-weight:600}
+.cart-item-qty{display:flex;align-items:center;gap:8px}
+.qty-btn{width:28px;height:28px;border-radius:50%;background:white;border:1.5px solid var(--border);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;color:var(--ink);font-weight:600}
+.qty-btn:hover{border-color:var(--plum);color:var(--plum)}
+.qty-num{font-size:.85rem;font-weight:700;color:var(--ink);min-width:20px;text-align:center}
+.cart-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:var(--ink-3);padding:2rem;text-align:center}
+.cart-empty .ico{font-size:3rem;opacity:.4}
+.cart-empty p{font-size:.88rem}
+.cart-footer{padding:1.4rem 1.6rem;border-top:1px solid var(--border)}
+.cart-footer-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;font-size:.82rem;color:var(--ink-3)}
+.cart-footer-row .amt{font-weight:600;color:var(--ink)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-top:.6rem;border-top:1.5px solid var(--border)}
+.cart-total .lbl{font-size:.9rem;font-weight:700;color:var(--ink)}
+.cart-total .amt{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--plum)}
+.checkout-btn{width:100%;background:var(--plum);color:white;border:none;border-radius:99px;padding:.85rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
+.checkout-btn:hover:not(:disabled){background:var(--ink-2);transform:translateY(-1px)}
+.checkout-btn:disabled{background:var(--ink-4);cursor:not-allowed}
+.view-bag-link{display:block;text-align:center;margin-top:.7rem;font-size:.78rem;color:var(--ink-3);text-decoration:none;font-weight:500;transition:color .15s}
+.view-bag-link:hover{color:var(--plum)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:white;padding:.7rem 1.4rem;border-radius:99px;font-size:.82rem;font-weight:500;z-index:9999;opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.2);pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--mint)}
+.toast.error{background:var(--rose)}
+
+footer{margin-top:1rem;padding:2rem;border-top:1px solid var(--border);text-align:center;font-size:.78rem;color:var(--ink-4)}
+
+@media(max-width:768px){
+  .nav{padding:0 1rem}
+  .nav-links{display:none}
+  .page-top,.toolbar,.products-wrap{padding-left:1rem;padding-right:1rem}
+  .page-top h1{font-size:2.2rem}
+  .product-grid{grid-template-columns:1fr}
+  .result-count{padding-right:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="home.html" class="nav-logo">
+    <div class="dot">🍰</div>
+    Ces Luscious Foods
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="active">Home</a>
+    <a href="shop.html">Menu</a>
+    <a href="cart.html">My Bag</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="profile.html">My Profile</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="page-top">
+  <div>
+    <h1>Our Menu</h1>
+    <p>Handcrafted Filipino desserts — made fresh, delivered with love</p>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <span style="color:var(--ink-4);font-size:.9rem">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search desserts…" oninput="renderProducts()">
+  </div>
+  <select class="sort-select" id="sortSelect" onchange="renderProducts()">
+    <option value="default">Sort: Default</option>
+    <option value="price_asc">Price: Low → High</option>
+    <option value="price_desc">Price: High → Low</option>
+    <option value="name">Name A–Z</option>
+    <option value="stock">Most In Stock</option>
+  </select>
+  <div class="filter-pills">
+    <button class="fpill active" onclick="setFilter('all',this)">All</button>
+    <button class="fpill" onclick="setFilter('in_stock',this)">In Stock</button>
+    <button class="fpill" onclick="setFilter('low',this)">Limited</button>
+    <button class="fpill" onclick="setFilter('out',this)">Sold Out</button>
+  </div>
+</div>
+<div class="result-count" id="resultCount"></div>
+
+<div class="products-wrap">
+  <div class="product-grid" id="productsGrid"></div>
+</div>
+
+<footer>© 2026 Ces Luscious Foods · Sweetness for every occasion</footer>
+
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Your Bag</h3>
+    <button class="close-cart" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-footer-row"><span>Subtotal</span><span class="amt" id="drawerSubtotal">₱0</span></div>
+    <div class="cart-footer-row"><span>Delivery</span><span class="amt" id="drawerDelivery">₱50</span></div>
+    <div class="cart-total">
+      <span class="lbl">Total</span>
+      <span class="amt" id="cartTotal">₱0</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="goToCheckout()">Proceed to Checkout →</button>
+    <a href="cart.html" class="view-bag-link">View full bag →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DELIVERY_FEE = 50;
+const FREE_THRESHOLD = 500;
+
+let currentFilter = 'all';
+
+// ── Toast ──
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ── Auth guard ──
+const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+if (!currentUser) setTimeout(() => window.location.href = 'login.html', 300);
+
+// ── Products ──
+function getProducts() {
+  let p = JSON.parse(localStorage.getItem('ces_products') || 'null');
+  if (!p || !p.length) {
+    p = [
+      {id:1,name:'Ube Halaya',desc:'Creamy purple yam jam — a beloved Filipino classic',price:250,stock:25,image:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400&q=80'},
+      {id:2,name:'Leche Flan',desc:'Rich caramel custard with silky smooth texture',price:180,stock:30,image:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80'},
+      {id:3,name:'Mango Graham',desc:'Layered mango cream dessert with graham crunch',price:220,stock:18,image:'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&q=80'},
+      {id:4,name:'Puto',desc:'Fluffy steamed rice cake, lightly sweet',price:120,stock:40,image:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&q=80'},
+      {id:5,name:'Maja Blanca',desc:'Coconut pudding with golden corn kernels',price:200,stock:22,image:'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80'},
+      {id:6,name:'Palitaw',desc:'Soft rice cakes rolled in coconut and sesame',price:100,stock:35,image:'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&q=80'},
+      {id:7,name:'Sapin-Sapin',desc:'Layered glutinous rice cake with coconut',price:280,stock:15,image:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80'},
+      {id:8,name:'Buko Pandan',desc:'Refreshing coconut and pandan gelatin dessert',price:190,stock:20,image:'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=80'}
+    ];
+    localStorage.setItem('ces_products', JSON.stringify(p));
+  }
+  return p;
+}
+
+// ── Cart helpers ──
+function getCart() { return JSON.parse(localStorage.getItem('ces_cart') || '[]'); }
+function saveCart(cart) { localStorage.setItem('ces_cart', JSON.stringify(cart)); updateCartUI(); }
+
+// ── Cart UI ──
+function updateCartUI() {
+  const cart = getCart();
+  const count = cart.reduce((s,i) => s + i.quantity, 0);
+  document.getElementById('cartCount').textContent = count;
+  renderCartDrawer();
+}
+
+function renderCartDrawer() {
+  const cart = getCart();
+  const itemsEl       = document.getElementById('cartItems');
+  const checkoutBtn   = document.getElementById('checkoutBtn');
+  const subtotalEl    = document.getElementById('drawerSubtotal');
+  const deliveryEl    = document.getElementById('drawerDelivery');
+  const totalEl       = document.getElementById('cartTotal');
+
+  if (!cart.length) {
+    itemsEl.innerHTML = `<div class="cart-empty"><div class="ico">🛒</div><p>Your bag is empty.<br>Add something delicious!</p></div>`;
+    subtotalEl.textContent = '₱0';
+    deliveryEl.textContent = '₱' + DELIVERY_FEE;
+    totalEl.textContent    = '₱' + DELIVERY_FEE;
+    checkoutBtn.disabled   = true;
+    return;
+  }
+
+  checkoutBtn.disabled = false;
+  const subtotal = cart.reduce((s,i) => s + i.price * i.quantity, 0);
+  const isFree   = subtotal >= FREE_THRESHOLD;
+  const delivery = isFree ? 0 : DELIVERY_FEE;
+  subtotalEl.textContent = '₱' + subtotal.toLocaleString();
+  deliveryEl.textContent = isFree ? 'FREE' : '₱' + DELIVERY_FEE;
+  totalEl.textContent    = '₱' + (subtotal + delivery).toLocaleString();
+
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <img class="cart-item-img" src="${item.image}" onerror="this.src='https://placehold.co/56/8b5cf6/white?text=🍰'" alt="${item.name}">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">₱${(item.price * item.quantity).toLocaleString()}</div>
+      </div>
+      <div class="cart-item-qty">
+        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qty-num">${item.quantity}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function changeQty(id, delta) {
+  let cart = getCart();
+  const idx = cart.findIndex(i => i.id === id);
+  if (idx === -1) return;
+  cart[idx].quantity += delta;
+  if (cart[idx].quantity <= 0) cart.splice(idx, 1);
+  saveCart(cart);
+}
+
+// ── Add to cart (does NOT place order — just adds to ces_cart) ──
+function addToCart(productId) {
+  const products = getProducts();
+  const product  = products.find(p => p.id === productId);
+  if (!product) return;
+  if (product.stock <= 0) { showToast('❌ Out of stock!', 'error'); return; }
+
+  let cart = getCart();
+  const existing = cart.find(i => i.id === productId);
+  if (existing) {
+    if (existing.quantity < product.stock) {
+      existing.quantity++;
+      showToast(`✓ ${product.name} qty updated`, 'success');
+    } else {
+      showToast(`⚠ Only ${product.stock} left!`, 'error');
+      return;
+    }
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      quantity: 1,
+      icon: ''
+    });
+    showToast(`✓ ${product.name} added to bag!`, 'success');
+  }
+  saveCart(cart);
+  openCart();
+}
+
+// ── Go to checkout (saves cart, redirects) ──
+function goToCheckout() {
+  const cart = getCart();
+  if (!cart.length) return;
+  localStorage.setItem('checkoutCart', JSON.stringify(cart));
+  showToast('Heading to checkout…', 'success');
+  setTimeout(() => { window.location.href = 'checkout.html'; }, 500);
+}
+
+// ── Filter / sort / render products ──
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts();
+}
+
+function renderProducts() {
+  let products = getProducts();
+  const search = document.getElementById('searchInput').value.toLowerCase().trim();
+  const sort   = document.getElementById('sortSelect').value;
+
+  if (search) products = products.filter(p =>
+    p.name.toLowerCase().includes(search) || (p.desc||'').toLowerCase().includes(search)
+  );
+  if (currentFilter === 'in_stock') products = products.filter(p => p.stock >= 10);
+  else if (currentFilter === 'low') products = products.filter(p => p.stock > 0 && p.stock < 10);
+  else if (currentFilter === 'out') products = products.filter(p => p.stock <= 0);
+
+  if (sort === 'price_asc')  products.sort((a,b) => a.price - b.price);
+  else if (sort === 'price_desc') products.sort((a,b) => b.price - a.price);
+  else if (sort === 'name')  products.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'stock') products.sort((a,b) => b.stock - a.stock);
+
+  document.getElementById('resultCount').textContent = `${products.length} item${products.length !== 1 ? 's' : ''} found`;
+
+  const grid = document.getElementById('productsGrid');
+  if (!products.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="ico">🔍</div><p>No items match your search.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = products.map(p => {
+    const isOut  = p.stock <= 0;
+    const isLow  = p.stock > 0 && p.stock < 10;
+    const badge  = isOut ? `<div class="card-badge sold-out">Sold Out</div>` :
+                   isLow ? `<div class="card-badge low">Only ${p.stock} left</div>` : '';
+    const sClass = isOut ? 'stock-out' : isLow ? 'stock-low' : 'stock-ok';
+    const sText  = isOut ? '✗ Out of stock' : isLow ? `⚠ ${p.stock} remaining` : `✓ ${p.stock} in stock`;
+    return `
+    <div class="card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${p.image}" onerror="this.src='https://placehold.co/400x300/7c3aed/white?text=${encodeURIComponent(p.name)}'" alt="${p.name}">
+        ${badge}
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc || 'Delicious Filipino dessert'}</div>
+        <div class="stock-info ${sClass}">${sText}</div>
+        <div class="card-footer">
+          <div class="card-price">₱${p.price.toLocaleString()}</div>
+          <button class="add-btn" onclick="addToCart(${p.id})" ${isOut ? 'disabled' : ''}>
+            ${isOut ? 'Sold Out' : '+ Add to Bag'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+  renderCartDrawer();
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+}
+
+function logout() {
+  localStorage.removeItem('currentUser');
+  window.location.href = 'login.html';
+}
+
+// Live sync from other tabs
+window.addEventListener('storage', e => {
+  if (e.key === 'ces_cart') updateCartUI();
+  if (e.key === 'ces_products') renderProducts();
+});
+
+// Init
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>

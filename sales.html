@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Report | Ces Luscious Foods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf8ff; --surface: #ffffff; --surface-2: #f3eeff; --surface-3: #ece5ff;
+      --border: #e2d8f8; --border-soft: #ede8fb;
+      --purple-deep: #4c1d95; --purple-main: #6d28d9; --purple-mid: #7c3aed;
+      --purple-light: #8b5cf6; --purple-soft: #c4b5fd; --purple-pale: #ede9fe;
+      --text-primary: #1c1033; --text-secondary: #5b4d7a; --text-muted: #9585b8;
+      --green: #059669; --green-bg: #d1fae5;
+      --amber: #d97706; --amber-bg: #fef3c7;
+      --blue: #2563eb; --blue-bg: #dbeafe;
+      --red: #dc2626; --red-bg: #fee2e2;
+      --shadow-sm: 0 1px 3px rgba(109,40,217,0.08);
+      --shadow-md: 0 4px 16px rgba(109,40,217,0.12);
+      --shadow-lg: 0 12px 40px rgba(109,40,217,0.16);
+      --radius: 14px; --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+    .navbar { background: var(--surface); border-bottom: 1px solid var(--border-soft); padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--purple-main); display: flex; align-items: center; gap: 0.5rem; }
+    .admin-chip { background: var(--purple-main); color: white; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.18s; }
+    .nav-links a:hover { background: var(--purple-pale); color: var(--purple-main); }
+    .nav-links a.active { background: var(--purple-pale); color: var(--purple-main); font-weight: 600; }
+    .logout-btn { background: none; border: 1.5px solid var(--border); padding: 0.45rem 1.1rem; border-radius: 99px; color: var(--text-secondary); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; transition: all 0.18s; }
+    .logout-btn:hover { border-color: var(--purple-light); color: var(--purple-main); background: var(--purple-pale); }
+
+    .container { max-width: 1320px; margin: 0 auto; padding: 2.5rem 2rem; }
+    .page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--purple-deep); line-height: 1.1; }
+    .page-subtitle { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.3rem; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 1.4rem 1.5rem; transition: all 0.22s; position: relative; overflow: hidden; }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-color, var(--purple-light)); opacity: 0.7; }
+    .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .stat-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.6rem; }
+    .stat-value { font-size: 1.9rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .stat-card.revenue .stat-value { color: var(--green); }
+    .stat-card.revenue { --accent-color: #059669; }
+    .stat-change { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    .filter-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-group { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1.5px solid var(--border); padding: 0.45rem 1rem; border-radius: 99px; transition: border-color 0.18s; }
+    .filter-group:focus-within { border-color: var(--purple-light); }
+    .filter-group label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+    .filter-group input[type="date"] { border: none; outline: none; background: none; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text-primary); }
+    .btn { padding: 0.5rem 1.2rem; border-radius: 99px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.18s; }
+    .btn-primary { background: var(--purple-main); color: white; }
+    .btn-primary:hover { background: var(--purple-deep); box-shadow: 0 3px 10px rgba(109,40,217,0.3); }
+    .btn-ghost { background: var(--surface); color: var(--text-secondary); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--purple-light); color: var(--purple-main); background: var(--purple-pale); }
+    .btn-export { background: var(--surface-2); color: var(--purple-main); border: 1.5px solid var(--border); padding: 0.5rem 1.2rem; border-radius: 99px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 0.4rem; }
+    .btn-export:hover { background: var(--purple-pale); border-color: var(--purple-soft); }
+
+    .notice-banner { background: var(--green-bg); border: 1px solid #a7f3d0; border-radius: var(--radius-sm); padding: 0.6rem 1rem; font-size: 0.8rem; color: var(--green); font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+
+    /* search */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; }
+    .search-box { display: flex; align-items: center; gap: 0.6rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: 99px; padding: 0.45rem 1rem; transition: border-color 0.18s; }
+    .search-box:focus-within { border-color: var(--purple-light); }
+    .search-box input { border: none; outline: none; background: none; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text-primary); width: 200px; }
+
+    .table-wrap { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); overflow-x: auto; }
+    .table-wrap table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    thead tr { background: var(--surface-2); border-bottom: 1px solid var(--border); }
+    thead th { padding: 0.85rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.15s; }
+    thead th:hover { color: var(--purple-main); }
+    thead th.sorted { color: var(--purple-main); }
+    thead th .sort-arrow { margin-left: 4px; opacity: 0.5; font-size: 0.65rem; }
+    thead th.sorted .sort-arrow { opacity: 1; }
+
+    tbody tr { border-bottom: 1px solid var(--border-soft); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface-2); }
+    tbody td { padding: 0.9rem 1rem; font-size: 0.875rem; vertical-align: middle; }
+
+    .order-id { font-weight: 700; color: var(--purple-main); font-size: 0.8rem; }
+    .amount { font-weight: 700; }
+    .customer-cell { display: flex; align-items: center; gap: 0.5rem; }
+    .customer-avatar { width: 30px; height: 30px; border-radius: 99px; background: var(--purple-pale); color: var(--purple-main); font-weight: 700; font-size: 0.72rem; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .customer-info { display: flex; flex-direction: column; gap: 1px; }
+    .customer-name-text { font-weight: 600; color: var(--text-primary); font-size: 0.85rem; }
+    .customer-phone { font-size: 0.72rem; color: var(--text-muted); }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 99px; }
+    .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 99px; background: currentColor; opacity: 0.7; }
+    .badge-pending    { background: var(--amber-bg); color: var(--amber); }
+    .badge-processing { background: var(--blue-bg);  color: var(--blue); }
+    .badge-delivered  { background: var(--green-bg); color: var(--green); }
+    .badge-cancelled  { background: var(--red-bg);   color: var(--red); }
+
+    .payment-badge { display: inline-flex; align-items: center; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 6px; }
+
+    /* Revenue highlight on delivered rows */
+    tbody tr.row-delivered { background: #f0fdf8; }
+    tbody tr.row-delivered:hover { background: #dcfce7; }
+    tbody tr.row-cancelled { opacity: 0.55; }
+
+    .empty-state { padding: 4rem 2rem; text-align: center; color: var(--text-muted); }
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state h3 { font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+    .empty-state p { font-size: 0.85rem; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text-primary); color: white; padding: 0.8rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; max-width: 280px; box-shadow: var(--shadow-lg); pointer-events: none; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: var(--green); }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">
+    <span class="logo-icon">🍰</span>
+    Ces Luscious Foods
+    <span class="admin-chip">Admin</span>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="inventory.html">Inventory</a>
+    <a href="sales.html" class="active">Sales</a>
+    <a href="orders.html">Orders</a>
+  </div>
+  <button class="logout-btn" onclick="logout()">Log out</button>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Sales Monitoring</h1>
+      <p class="page-subtitle">Revenue is counted from Delivered orders only</p>
+    </div>
+    <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
+
+  <div class="stats-grid" id="salesStats"></div>
+
+  <div class="filter-row">
+    <div class="filter-group">
+      <label>From</label>
+      <input type="date" id="startDate">
+    </div>
+    <div class="filter-group">
+      <label>To</label>
+      <input type="date" id="endDate">
+    </div>
+    <button class="btn btn-primary" onclick="filterSales()">Apply Filter</button>
+    <button class="btn btn-ghost" onclick="resetFilter()">Reset</button>
+    <div class="notice-banner">✅ Only <strong>Delivered</strong> orders count as revenue</div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <span style="color:var(--text-muted)">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name or order ID…" oninput="applySearchAndSort()">
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="setSort('id')">Order ID <span class="sort-arrow" id="arr-id"></span></th>
+          <th onclick="setSort('date')">Date <span class="sort-arrow" id="arr-date">↓</span></th>
+          <th>Customer</th>
+          <th onclick="setSort('items')">Items <span class="sort-arrow" id="arr-items"></span></th>
+          <th onclick="setSort('status')">Status <span class="sort-arrow" id="arr-status"></span></th>
+          <th onclick="setSort('total')">Total <span class="sort-arrow" id="arr-total"></span></th>
+          <th>Payment</th>
+        </tr>
+      </thead>
+      <tbody id="salesBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  if (!currentUser || currentUser.role !== 'admin') {
+    window.location.href = 'login.html';
+  }
+
+  function getOrders() { return JSON.parse(localStorage.getItem('ces_orders') || '[]'); }
+
+  // resolve legacy field names
+  function orderDate(o)  { return o.orderDate || o.date || null; }
+  function orderName(o)  { return o.customerName || o.customer || ''; }
+  function orderPhone(o) { return o.phone || ''; }
+
+  function fmtDate(val) {
+    if (!val) return '—';
+    const d = new Date(val);
+    return isNaN(d) ? '—' : d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function initials(name) {
+    return (name || '?').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  function statusBadge(status) {
+    const cls = { Pending:'badge-pending', Processing:'badge-processing', Delivered:'badge-delivered', Cancelled:'badge-cancelled' };
+    return `<span class="status-badge ${cls[status] || ''}">${status || 'Unknown'}</span>`;
+  }
+
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.className = 'toast'; }, 2600);
+  }
+
+  // ── State ──
+  let baseOrders      = [];   // after date filter
+  let displayedOrders = [];   // after search + sort
+  let sortKey         = 'date';
+  let sortAsc         = false;
+
+  // ── Stats ──
+  function updateStats(orders) {
+    const delivered = orders.filter(o => o.status === 'Delivered');
+    const revenue   = delivered.reduce((s, o) => s + (o.total || 0), 0);
+    const cod       = orders.filter(o => (o.paymentMethod || '').toLowerCase() === 'cod').length;
+    const gcash     = orders.filter(o => (o.paymentMethod || '').toLowerCase() === 'gcash').length;
+
+    document.getElementById('salesStats').innerHTML = `
+      <div class="stat-card revenue">
+        <div class="stat-label">Revenue (Delivered)</div>
+        <div class="stat-value">₱${revenue.toLocaleString()}</div>
+        <div class="stat-change">${delivered.length} completed order${delivered.length !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value">${orders.length}</div>
+        <div class="stat-change">In selected range</div>
+      </div>
+      <div class="stat-card" style="--accent-color:#ea580c">
+        <div class="stat-label">COD Orders</div>
+        <div class="stat-value">${cod}</div>
+        <div class="stat-change">Cash on Delivery</div>
+      </div>
+      <div class="stat-card" style="--accent-color:#0891b2">
+        <div class="stat-label">GCash Orders</div>
+        <div class="stat-value">${gcash}</div>
+        <div class="stat-change">Digital payment</div>
+      </div>`;
+  }
+
+  // ── Sort ──
+  function setSort(key) {
+    if (sortKey === key) { sortAsc = !sortAsc; }
+    else { sortKey = key; sortAsc = key !== 'date'; }
+    updateSortArrows();
+    applySearchAndSort();
+  }
+
+  function updateSortArrows() {
+    ['id','date','items','status','total'].forEach(k => {
+      const el = document.getElementById('arr-' + k);
+      if (!el) return;
+      el.textContent = sortKey === k ? (sortAsc ? '↑' : '↓') : '';
+    });
+    document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+    const thMap = { id:0, date:1, items:3, status:4, total:5 };
+    const idx = thMap[sortKey];
+    if (idx !== undefined) {
+      document.querySelectorAll('thead th')[idx]?.classList.add('sorted');
+    }
+  }
+
+  // ── Search + sort + render ──
+  function applySearchAndSort() {
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    let orders = [...baseOrders];
+
+    if (search) {
+      orders = orders.filter(o =>
+        String(o.id).includes(search) ||
+        orderName(o).toLowerCase().includes(search) ||
+        orderPhone(o).toLowerCase().includes(search)
+      );
+    }
+
+    orders.sort((a, b) => {
+      let va, vb;
+      if (sortKey === 'date')   { va = new Date(orderDate(a) || 0); vb = new Date(orderDate(b) || 0); }
+      if (sortKey === 'id')     { va = a.id; vb = b.id; }
+      if (sortKey === 'total')  { va = a.total || 0; vb = b.total || 0; }
+      if (sortKey === 'items')  { va = (a.items || []).length; vb = (b.items || []).length; }
+      if (sortKey === 'status') { va = a.status || ''; vb = b.status || ''; }
+      if (va < vb) return sortAsc ? -1 : 1;
+      if (va > vb) return sortAsc ?  1 : -1;
+      return 0;
+    });
+
+    displayedOrders = orders;
+    renderSales(orders);
+    updateStats(orders);
+  }
+
+  // ── Render table ──
+  function renderSales(orders) {
+    const tbody = document.getElementById('salesBody');
+    if (!orders.length) {
+      tbody.innerHTML = `
+        <tr><td colspan="7">
+          <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <h3>No sales data found</h3>
+            <p>Adjust your date range, search, or reset the filter</p>
+          </div>
+        </td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = orders.map(order => {
+      const name   = orderName(order);
+      const phone  = orderPhone(order);
+      const date   = fmtDate(orderDate(order));
+      const rowCls = order.status === 'Delivered' ? 'row-delivered' : order.status === 'Cancelled' ? 'row-cancelled' : '';
+
+      return `
+        <tr class="${rowCls}">
+          <td><span class="order-id">#${String(order.id).slice(-8)}</span></td>
+          <td style="font-size:0.82rem;color:var(--text-secondary)">${date}</td>
+          <td>
+            <div class="customer-cell">
+              <span class="customer-avatar">${initials(name)}</span>
+              <div class="customer-info">
+                <span class="customer-name-text">${name || '—'}</span>
+                ${phone ? `<span class="customer-phone">${phone}</span>` : ''}
+              </div>
+            </div>
+          </td>
+          <td>${(order.items || []).length} item${(order.items || []).length !== 1 ? 's' : ''}</td>
+          <td>${statusBadge(order.status)}</td>
+          <td><span class="amount" style="${order.status === 'Delivered' ? 'color:var(--green)' : ''}">₱${(order.total || 0).toLocaleString()}</span></td>
+          <td><span class="payment-badge">${(order.paymentMethod || '—').toUpperCase()}</span></td>
+        </tr>`;
+    }).join('');
+  }
+
+  // ── Date filter ──
+  function filterSales() {
+    const start = document.getElementById('startDate').value;
+    const end   = document.getElementById('endDate').value;
+    let orders  = getOrders();
+
+    if (start && end) {
+      if (start > end) { showToast('Start date cannot be after end date', ''); return; }
+      orders = orders.filter(o => {
+        const d = orderDate(o);
+        if (!d) return false;
+        const ds = new Date(d);
+        if (isNaN(ds)) return false;
+        const iso = ds.toISOString().split('T')[0];
+        return iso >= start && iso <= end;
+      });
+    } else if (start || end) {
+      showToast('Please set both a start and end date', '');
+      return;
+    }
+
+    baseOrders = orders;
+    applySearchAndSort();
+  }
+
+  function resetFilter() {
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value   = '';
+    document.getElementById('searchInput').value = '';
+    baseOrders = getOrders();
+    applySearchAndSort();
+  }
+
+  // ── Export CSV ──
+  function exportCSV() {
+    if (!displayedOrders.length) { showToast('Nothing to export', ''); return; }
+    const rows = [['Order ID','Date','Customer','Phone','Items','Status','Total','Payment']];
+    displayedOrders.forEach(o => {
+      rows.push([
+        '#' + String(o.id).slice(-8),
+        fmtDate(orderDate(o)),
+        orderName(o),
+        orderPhone(o),
+        (o.items || []).length,
+        o.status || '',
+        o.total || 0,
+        (o.paymentMethod || '').toUpperCase()
+      ]);
+    });
+    const csv  = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `sales-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('CSV exported!', 'success');
+  }
+
+  // ── Logout ──
+  function logout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+  }
+
+  // ── Init ──
+  baseOrders = getOrders();
+  updateSortArrows();
+  applySearchAndSort();
+
+  // ── Live refresh ──
+  window.addEventListener('storage', e => {
+    if (e.key === 'ces_orders') {
+      baseOrders = getOrders();
+      applySearchAndSort();
+    }
+  });
+</script>
+</body>
+</html>

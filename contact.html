@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Ces Luscious Foods · Contact | Real-time Global Edits</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Poppins', sans-serif;
+      background: #ffffff;
+      color: #1e1a2f;
+      line-height: 1.5;
+    }
+
+    .navbar {
+      background: #e3d6ff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e9e0ff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6a3cc9, #9b6eff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .admin-badge {
+      background: #e3d5ff;
+      color: #5a2dca;
+      padding: 0.2rem 0.6rem;
+      border-radius: 60px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin-left: 6px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #4a3a7a;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+      padding-bottom: 4px;
+    }
+
+    .nav-links a:hover {
+      color: #6a3cc9;
+      border-bottom: 2px solid #9b6eff;
+    }
+
+    .nav-links a.active-link {
+      color: #6a3cc9;
+      border-bottom: 2px solid #9b6eff;
+    }
+
+    .logout-btn {
+      background: #f0eaff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #e2d6ff;
+      color: #4a2b9e;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+      margin-left: 0.5rem;
+    }
+
+    .logout-btn:hover {
+      background: #e4d6ff;
+      transform: scale(1.02);
+    }
+
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      background: #f0eaff;
+      padding: 0.3rem 0.9rem;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      border: 1px solid #e3d6ff;
+      color: #5a2dca;
+      font-weight: 500;
+    }
+
+    .cart-icon:hover {
+      background: #e8ddff;
+      border-color: #cbb5ff;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #6a3cc9;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 50%;
+      box-shadow: 0 0 4px #c4b0f0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem;
+      background: #e3d6ff;
+      border-radius: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e9e0ff;
+      box-shadow: 0 2px 12px rgba(90, 45, 202, 0.04);
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #5a2dca, #9b6eff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero .tagline {
+      font-size: 1.1rem;
+      color: #4a3a6a;
+    }
+
+    .admin-edit-bar {
+      background: #f0eaff;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border: 1px solid #d4c2ff;
+    }
+
+    .admin-edit-bar span {
+      color: #5a2dca;
+      font-weight: 500;
+    }
+
+    .edit-toggle-btn {
+      background: #6a3cc9;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .edit-toggle-btn:hover {
+      background: #5a2dca;
+      transform: scale(1.02);
+    }
+
+    .save-btn {
+      background: #2d8c5a;
+    }
+
+    .save-btn:hover {
+      background: #1e6b45;
+    }
+
+    .cancel-btn {
+      background: #a0a0c0;
+    }
+
+    .cancel-btn:hover {
+      background: #8a8ab0;
+    }
+
+    .add-card-btn {
+      background: #9b6eff;
+    }
+
+    .add-card-btn:hover {
+      background: #7a4fe0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-card {
+      background: #f0eaff;
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 1px solid #e3d6ff;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(90, 45, 202, 0.05);
+      position: relative;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(90, 45, 202, 0.1);
+      background: #e8ddff;
+      border-color: #d4c2ff;
+    }
+
+    .card-admin-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+      z-index: 5;
+    }
+
+    .card-admin-controls button {
+      background: rgba(106, 60, 201, 0.9);
+      border: none;
+      color: white;
+      border-radius: 30px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.1s;
+    }
+
+    .card-admin-controls button:hover {
+      background: #5a2dca;
+    }
+
+    .contact-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card h3 {
+      color: #5a2dca;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .contact-card p {
+      color: #4a3a6a;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+      word-break: break-word;
+    }
+
+    .contact-card a {
+      color: #6a3cc9;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+
+    .edit-input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid #c4b0f0;
+      font-family: inherit;
+      font-size: inherit;
+      background: white;
+      margin-bottom: 8px;
+      transition: 0.1s;
+    }
+
+    .edit-input:focus {
+      outline: none;
+      border-color: #6a3cc9;
+      box-shadow: 0 0 0 2px #e3d6ff;
+    }
+
+    .map-section {
+      background: #f0eaff;
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 1px solid #e3d6ff;
+      margin-bottom: 2rem;
+    }
+
+    .map-section h3 {
+      color: #5a2dca;
+      margin-bottom: 1.2rem;
+      font-size: 1.3rem;
+      border-left: 4px solid #9b6eff;
+      padding-left: 0.8rem;
+    }
+
+    .map-wrapper {
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 2px solid #d4c2ff;
+    }
+
+    .map-wrapper iframe {
+      width: 100%;
+      height: 480px;
+      border: none;
+      display: block;
+    }
+
+    .add-line-btn {
+      background: #6a3cc9;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .add-line-btn:hover {
+      background: #5a2dca;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #4a3a6a;
+      border-top: 1px solid #e9e0ff;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2d2b3a;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      z-index: 2200;
+      transition: opacity 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      font-weight: 500;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .live-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: #2d8c5a;
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 0 0 #2d8c5a;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.5; transform: scale(0.9);}
+      100% { opacity: 1; transform: scale(1.2);}
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      .nav-links {
+        justify-content: center;
+      }
+      .map-wrapper iframe {
+        height: 320px;
+      }
+      .container {
+        padding: 1rem;
+      }
+      .hero {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🍰 Ces Luscious Foods <span id="adminBadgeSpan" class="admin-badge" style="display: none;">Admin</span></div>
+  <div class="nav-links">
+    <a href="home.html" class="active">Home</a>
+    <a href="shop.html">Menu</a>
+    <a href="cart.html">My Bag</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="profile.html">My Profile</a>
+  </div>
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <div class="cart-icon" onclick="window.location.href='cart.html'">
+        🛒 <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <h1 id="heroTitle">Get in Touch</h1>
+      <div class="tagline" id="heroTagline">✨ We'd love to hear from you!</div>
+    </div>
+
+    <div id="adminEditBar" style="display: none;" class="admin-edit-bar">
+      <span>✏️ <span class="live-indicator"></span> GLOBAL EDIT MODE — Changes save for EVERY visitor</span>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button id="enableEditBtn" class="edit-toggle-btn">✏️ Edit Mode</button>
+        <button id="saveContactBtn" class="edit-toggle-btn save-btn">💾 Publish Changes (Global)</button>
+        <button id="cancelEditBtn" class="edit-toggle-btn cancel-btn">↺ Cancel</button>
+        <button id="addNewCardBtn" class="edit-toggle-btn add-card-btn">➕ Add Card</button>
+      </div>
+    </div>
+
+    <div id="contactGrid" class="contact-grid"></div>
+
+    <div class="map-section">
+      <h3 id="mapTitle">📍 Find Us — Malolos City, Bulacan, Philippines</h3>
+      <div class="map-wrapper">
+        <iframe id="mapIframe" 
+          src=""
+          allowfullscreen=""
+          loading="lazy"
+          title="Map Location">
+        </iframe>
+      </div>
+      <div id="mapEditNote" style="display: none; margin-top: 12px;">
+        <label style="color:#5a2dca; font-weight:500;">🗺️ Google Maps Embed URL (editable):</label>
+        <input type="text" id="mapEmbedUrlInput" class="edit-input" style="margin-top: 8px; width:100%;" placeholder="Paste iframe embed URL" />
+        <small style="color:#5a2dca;">✅ Any admin change auto-syncs to all users in real-time via localStorage event</small>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Ces Luscious Foods · Sweetness for every occasion</p>
+  </footer>
+
+  <div id="toast" class="toast">✨</div>
+
+  <script>
+    // ---------- GLOBAL SYNC: any change by admin is instantly visible to all visitors (same browser/tab)
+    // We use localStorage + storage event to broadcast changes across all open tabs/windows.
+    // For true cross-device, data persists in localStorage (shared across same origin). 
+    // Admin updates trigger a version increment / broadcast so other users see fresh data immediately.
+    
+    const CONTACT_DATA_KEY = 'ces_contact_data_global_v2';
+    const CONTACT_VERSION_KEY = 'ces_contact_version'; // force refresh
+    
+    let currentUser = null;
+    let isAdmin = false;
+    let editMode = false;
+    let contactData = null;
+    
+    // Default fresh data
+    const DEFAULT_DATA = {
+      cards: [
+        { icon: "📍", title: "Our Location", lines: ["Malolos City, Bulacan", "Metro Manila Area (Delivery Available)"], type: "text" },
+        { icon: "📞", title: "Phone Number", lines: ["(555) 123-4567", "Mon-Sat: 9AM - 7PM"], type: "text" },
+        { icon: "✉️", title: "Email Address", lines: ["hello@ceslusciousfoods.com", "orders@ceslusciousfoods.com"], type: "email" },
+        { icon: "📱", title: "Social Media", lines: ["Facebook: @ceslusciousfoods", "Instagram: @ceslusciousfoods"], type: "text" }
+      ],
+      hero: { title: "Get in Touch", tagline: "✨ We'd love to hear from you!" },
+      map: { title: "📍 Find Us — Malolos City, Bulacan, Philippines", embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123810.46491337874!2d120.76618!3d14.8433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b19b28e748f5%3A0xe4c0e52d8a4e1e07!2sMalolos%2C%20Bulacan!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph" }
+    };
+    
+    // helper: load from localStorage, ensure structure
+    function loadContactData() {
+      const saved = localStorage.getItem(CONTACT_DATA_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          // ensure required fields exist
+          if (parsed.cards && parsed.hero && parsed.map && parsed.map.embedUrl) {
+            contactData = parsed;
+          } else {
+            contactData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+          }
+        } catch(e) { 
+          contactData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        }
+      } else {
+        contactData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        saveContactDataToLocal(false);
+      }
+      // also ensure map iframe is valid
+      if (!contactData.map.embedUrl) contactData.map.embedUrl = DEFAULT_DATA.map.embedUrl;
+    }
+    
+    function saveContactDataToLocal(triggerSync = true) {
+      localStorage.setItem(CONTACT_DATA_KEY, JSON.stringify(contactData));
+      if (triggerSync) {
+        // increment version so other tabs know something changed
+        const newVersion = Date.now();
+        localStorage.setItem(CONTACT_VERSION_KEY, newVersion.toString());
+        // custom event to force immediate refresh on same page (fallback)
+        window.dispatchEvent(new StorageEvent('storage', { key: CONTACT_DATA_KEY, newValue: JSON.stringify(contactData) }));
+      }
+    }
+    
+    // Real-time sync: when other tabs or same-page localStorage changes, refresh UI (only if not in editMode for admin)
+    function bindGlobalSync() {
+      window.addEventListener('storage', (e) => {
+        if (e.key === CONTACT_DATA_KEY && e.newValue) {
+          try {
+            const newData = JSON.parse(e.newValue);
+            if (newData && newData.cards) {
+              contactData = newData;
+              if (!editMode) {
+                // Non-editing mode: refresh silently for regular users AND for admin when they are NOT editing
+                refreshAllUI();
+                showMessage("✨ Live update: contact info refreshed", false);
+              } else {
+                // admin editing, but data changed externally? maybe conflict: we can reload but keep edit mode? we'll show notif.
+                if (isAdmin && editMode) {
+                  showMessage("⚠️ External update detected. Your changes may conflict. Please cancel edit & re-enter.", true);
+                } else {
+                  refreshAllUI();
+                }
+              }
+            }
+          } catch(err) {}
+        }
+        if (e.key === 'ces_cart') updateCartCount();
+      });
+    }
+    
+    // UI renderers
+    function renderContactGrid() {
+      const grid = document.getElementById('contactGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (!contactData || !contactData.cards) return;
+      
+      contactData.cards.forEach((card, idx) => {
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'contact-card';
+        
+        if (isAdmin && editMode) {
+          const controlsDiv = document.createElement('div');
+          controlsDiv.className = 'card-admin-controls';
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = '🗑️ Delete';
+          deleteBtn.style.background = '#d45c5c';
+          deleteBtn.onclick = (e) => { e.stopPropagation(); deleteCard(idx); };
+          controlsDiv.appendChild(deleteBtn);
+          cardDiv.appendChild(controlsDiv);
+        }
+        
+        // Icon
+        const iconSpan = document.createElement('div');
+        iconSpan.className = 'contact-icon';
+        if (isAdmin && editMode) {
+          const iconInput = document.createElement('input');
+          iconInput.type = 'text';
+          iconInput.value = card.icon || '📌';
+          iconInput.className = 'edit-input';
+          iconInput.style.fontSize = '2rem';
+          iconInput.style.width = '80px';
+          iconInput.style.textAlign = 'center';
+          iconInput.addEventListener('change', (e) => { contactData.cards[idx].icon = e.target.value; });
+          iconSpan.appendChild(iconInput);
+        } else {
+          iconSpan.textContent = card.icon || '📍';
+        }
+        cardDiv.appendChild(iconSpan);
+        
+        // Title
+        const titleEl = document.createElement('h3');
+        if (isAdmin && editMode) {
+          const titleInput = document.createElement('input');
+          titleInput.type = 'text';
+          titleInput.value = card.title;
+          titleInput.className = 'edit-input';
+          titleInput.style.fontSize = '1.2rem';
+          titleInput.style.fontWeight = '600';
+          titleInput.addEventListener('change', (e) => { contactData.cards[idx].title = e.target.value; });
+          titleEl.appendChild(titleInput);
+        } else {
+          titleEl.textContent = card.title;
+        }
+        cardDiv.appendChild(titleEl);
+        
+        // Lines
+        card.lines.forEach((line, lineIdx) => {
+          const p = document.createElement('p');
+          if (isAdmin && editMode) {
+            const lineInput = document.createElement('input');
+            lineInput.type = 'text';
+            lineInput.value = line;
+            lineInput.className = 'edit-input';
+            lineInput.addEventListener('change', (e) => {
+              contactData.cards[idx].lines[lineIdx] = e.target.value;
+            });
+            p.appendChild(lineInput);
+          } else {
+            // Smart detection for email / links
+            if (line.includes('@') && line.includes('.') && !line.startsWith('http')) {
+              const mailLink = document.createElement('a');
+              mailLink.href = `mailto:${line}`;
+              mailLink.textContent = line;
+              p.appendChild(mailLink);
+            } else if (line.startsWith('http')) {
+              const link = document.createElement('a');
+              link.href = line;
+              link.textContent = line;
+              link.target = "_blank";
+              p.appendChild(link);
+            } else {
+              p.textContent = line;
+            }
+          }
+          cardDiv.appendChild(p);
+        });
+        
+        if (isAdmin && editMode) {
+          const addLineBtn = document.createElement('button');
+          addLineBtn.textContent = '+ Add Detail Line';
+          addLineBtn.className = 'add-line-btn';
+          addLineBtn.onclick = () => addLineToCard(idx);
+          cardDiv.appendChild(addLineBtn);
+        }
+        grid.appendChild(cardDiv);
+      });
+    }
+    
+    function renderHero() {
+      const heroTitle = document.getElementById('heroTitle');
+      const heroTagline = document.getElementById('heroTagline');
+      if (!heroTitle || !heroTagline) return;
+      if (isAdmin && editMode) {
+        heroTitle.innerHTML = '';
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.value = contactData.hero.title;
+        titleInput.className = 'edit-input';
+        titleInput.style.fontSize = '2rem';
+        titleInput.style.fontWeight = 'bold';
+        titleInput.style.textAlign = 'center';
+        titleInput.style.width = '100%';
+        titleInput.addEventListener('change', (e) => { contactData.hero.title = e.target.value; });
+        heroTitle.appendChild(titleInput);
+        
+        heroTagline.innerHTML = '';
+        const taglineInput = document.createElement('input');
+        taglineInput.type = 'text';
+        taglineInput.value = contactData.hero.tagline;
+        taglineInput.className = 'edit-input';
+        taglineInput.style.textAlign = 'center';
+        taglineInput.style.width = '100%';
+        taglineInput.addEventListener('change', (e) => { contactData.hero.tagline = e.target.value; });
+        heroTagline.appendChild(taglineInput);
+      } else {
+        heroTitle.textContent = contactData.hero.title;
+        heroTagline.textContent = contactData.hero.tagline;
+      }
+    }
+    
+    function renderMapSection() {
+      const mapTitleEl = document.getElementById('mapTitle');
+      const mapIframe = document.getElementById('mapIframe');
+      const mapEditNote = document.getElementById('mapEditNote');
+      const mapUrlInput = document.getElementById('mapEmbedUrlInput');
+      
+      if (isAdmin && editMode) {
+        mapTitleEl.innerHTML = '';
+        const mapTitleInput = document.createElement('input');
+        mapTitleInput.type = 'text';
+        mapTitleInput.value = contactData.map.title;
+        mapTitleInput.className = 'edit-input';
+        mapTitleInput.style.fontSize = '1.3rem';
+        mapTitleInput.style.fontWeight = 'bold';
+        mapTitleInput.style.width = '100%';
+        mapTitleInput.addEventListener('change', (e) => { contactData.map.title = e.target.value; renderMapSection(); });
+        mapTitleEl.appendChild(mapTitleInput);
+        mapEditNote.style.display = 'block';
+        if (mapUrlInput) {
+          mapUrlInput.value = contactData.map.embedUrl;
+          mapUrlInput.addEventListener('change', (e) => {
+            contactData.map.embedUrl = e.target.value;
+            mapIframe.src = contactData.map.embedUrl;
+          });
+        }
+      } else {
+        mapTitleEl.textContent = contactData.map.title;
+        mapEditNote.style.display = 'none';
+        if (contactData.map.embedUrl) {
+          mapIframe.src = contactData.map.embedUrl;
+        }
+      }
+    }
+    
+    function refreshAllUI() {
+      renderContactGrid();
+      renderHero();
+      renderMapSection();
+    }
+    
+    // Data mutations
+    function addLineToCard(cardIdx) {
+      contactData.cards[cardIdx].lines.push("✨ New contact detail");
+      refreshAllUI();
+    }
+    
+    function deleteCard(cardIdx) {
+      if (contactData.cards.length <= 1) {
+        showMessage("Cannot delete the only contact card!", true);
+        return;
+      }
+      contactData.cards.splice(cardIdx, 1);
+      refreshAllUI();
+    }
+    
+    function addNewCard() {
+      const newCard = {
+        icon: "📌",
+        title: "New Contact Info",
+        lines: ["Write your custom info here", "Editable by admin"],
+        type: "text"
+      };
+      contactData.cards.push(newCard);
+      refreshAllUI();
+      showMessage("➕ New card added. Don't forget to publish changes!", false);
+    }
+    
+    function setEditMode(mode) {
+      if (!isAdmin) return;
+      editMode = mode;
+      refreshAllUI();
+      showMessage(editMode ? "✏️ EDIT MODE ACTIVE — Changes affect EVERY visitor once saved" : "👁️ Edit mode OFF", false);
+    }
+    
+    function saveAllChanges() {
+      saveContactDataToLocal(true);
+      showMessage('✅ GLOBAL UPDATE COMPLETE! All users & tabs will see latest contact details.', false);
+      setEditMode(false);
+    }
+    
+    function cancelEdit() {
+      loadContactData(); // revert to saved version
+      refreshAllUI();
+      setEditMode(false);
+      showMessage('↺ Edits discarded, reloaded saved global content.', false);
+    }
+    
+    function showMessage(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toast.style.background = isError ? '#c23b3b' : '#2d5a3c';
+      setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+    
+    function initAuth() {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        try {
+          currentUser = JSON.parse(storedUser);
+          isAdmin = (currentUser.role === 'admin');
+        } catch(e) { currentUser = null; isAdmin = false; }
+      }
+      const adminBadge = document.getElementById('adminBadgeSpan');
+      const adminBar = document.getElementById('adminEditBar');
+      if (isAdmin) {
+        if(adminBadge) adminBadge.style.display = 'inline-block';
+        if(adminBar) adminBar.style.display = 'flex';
+      } else {
+        if(adminBadge) adminBadge.style.display = 'none';
+        if(adminBar) adminBar.style.display = 'none';
+      }
+      loadContactData();
+      refreshAllUI();
+      updateCartCount();
+      
+      if (isAdmin) {
+        showMessage('👑 Admin mode: any edit will be published GLOBALLY for all customers', false);
+      } else {
+        showMessage('🍰 Welcome! Admin changes appear here instantly in real time.', false);
+      }
+    }
+    
+    function getCart() { return JSON.parse(localStorage.getItem('ces_cart') || '[]'); }
+    function updateCartCount() {
+      const cart = getCart();
+      const count = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      const cartSpan = document.getElementById('cartCount');
+      if (cartSpan) cartSpan.textContent = count;
+    }
+    
+    function logout() {
+      localStorage.removeItem('currentUser');
+      showMessage('👋 Logged out', false);
+      setTimeout(() => { window.location.href = 'login.html'; }, 800);
+    }
+    
+    // ---- attach listeners & global sync initialization ----
+    document.addEventListener('DOMContentLoaded', () => {
+      initAuth();
+      bindGlobalSync();
+      
+      document.getElementById('enableEditBtn')?.addEventListener('click', () => setEditMode(true));
+      document.getElementById('saveContactBtn')?.addEventListener('click', saveAllChanges);
+      document.getElementById('cancelEditBtn')?.addEventListener('click', cancelEdit);
+      document.getElementById('addNewCardBtn')?.addEventListener('click', addNewCard);
+      
+      // Real-time cart sync
+      window.addEventListener('storage', (e) => { if (e.key === 'ces_cart') updateCartCount(); });
+      setInterval(() => updateCartCount(), 2000);
+    });
+  </script>
+</body>
+</html>

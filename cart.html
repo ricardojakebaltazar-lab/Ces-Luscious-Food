@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Bag — Ces Luscious Foods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c0f2e;--ink-2:#3a1f5c;--ink-3:#6b5280;--ink-4:#a891c0;
+  --cream:#fdf8f2;--cream-2:#f5ede0;--cream-3:#ede0cc;
+  --plum:#4a1569;--plum-2:#6b2d94;--plum-3:#9b5bc4;--plum-pale:#f0e8f8;
+  --gold:#c8832a;--gold-pale:#fdf0dc;
+  --rose:#b83560;--rose-pale:#fce8ef;
+  --mint:#1e7a5a;--mint-pale:#e0f5ed;
+  --white:#fff;
+  --border:rgba(74,21,105,.1);--border-2:rgba(74,21,105,.18);
+  --shadow:0 2px 16px rgba(74,21,105,.08);
+  --shadow-lg:0 8px 40px rgba(74,21,105,.15);
+  --r:18px;--r-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(253,248,242,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;transition:box-shadow .3s}
+.nav.scrolled{box-shadow:var(--shadow)}
+.nav-logo{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;color:var(--plum);display:flex;align-items:center;gap:10px;letter-spacing:-.01em;text-decoration:none}
+.nav-logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--plum),var(--plum-2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 8px rgba(74,21,105,.3)}
+.nav-links{display:flex;gap:2px}
+.nav-links a{color:var(--ink-3);text-decoration:none;font-size:.82rem;font-weight:500;padding:.45rem .95rem;border-radius:99px;transition:all .18s}
+.nav-links a:hover,.nav-links a.active{color:var(--plum);background:var(--plum-pale)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.cart-btn{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:99px;padding:.48rem 1.15rem .48rem .9rem;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;position:relative;box-shadow:0 2px 12px rgba(74,21,105,.3)}
+.cart-btn:hover{transform:translateY(-2px)}
+.cart-badge{background:var(--rose);color:white;font-size:.6rem;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;position:absolute;top:-7px;right:-6px;border:2px solid var(--cream)}
+.logout-btn{background:none;border:1.5px solid var(--border-2);padding:.45rem 1.05rem;border-radius:99px;color:var(--ink-3);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;transition:all .18s}
+.logout-btn:hover{border-color:var(--plum-3);color:var(--plum)}
+
+/* PAGE */
+.page{max-width:1160px;margin:0 auto;padding:2.5rem 1.5rem;position:relative;z-index:1}
+.page-hero{margin-bottom:2rem}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--ink-4);margin-bottom:.8rem}
+.breadcrumb a{color:var(--ink-3);text-decoration:none;transition:color .15s}
+.breadcrumb a:hover{color:var(--plum)}
+.breadcrumb span{color:var(--ink-4)}
+.page-title{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:700;color:var(--ink);letter-spacing:-.03em}
+.page-title em{color:var(--plum);font-style:italic}
+
+/* LAYOUT */
+.cart-layout{display:grid;grid-template-columns:1fr 360px;gap:1.8rem;align-items:start}
+
+/* CART TABLE CARD */
+.cart-card{background:white;border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden}
+.cart-card-head{padding:1.3rem 1.6rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--cream)}
+.cart-card-head h2{font-family:'Fraunces',serif;font-size:1.2rem;color:var(--ink);letter-spacing:-.01em}
+.item-count{font-size:.78rem;font-weight:600;color:var(--ink-3);background:var(--cream-2);border:1px solid var(--border);padding:.25rem .75rem;border-radius:99px}
+
+/* CART ITEM ROW */
+.cart-row{display:flex;gap:16px;align-items:center;padding:1.1rem 1.6rem;border-bottom:1px solid var(--border);transition:background .18s}
+.cart-row:last-child{border-bottom:none}
+.cart-row:hover{background:var(--cream)}
+.ci-img{width:70px;height:70px;border-radius:12px;object-fit:cover;background:var(--cream-2);flex-shrink:0;border:1px solid var(--border)}
+.ci-meta{flex:1;min-width:0}
+.ci-name{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;color:var(--ink);letter-spacing:-.01em;margin-bottom:3px}
+.ci-unit{font-size:.76rem;color:var(--ink-4);font-weight:500}
+.ci-controls{display:flex;align-items:center;gap:18px}
+.qty-wrap{display:flex;align-items:center;gap:8px;background:var(--cream);border:1px solid var(--border);border-radius:99px;padding:.25rem .6rem}
+.qbtn{width:26px;height:26px;border-radius:50%;background:white;border:1.5px solid var(--border-2);font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700;transition:all .15s}
+.qbtn:hover{border-color:var(--plum-3);color:var(--plum);background:var(--plum-pale)}
+.qnum{font-size:.88rem;font-weight:700;color:var(--ink);min-width:24px;text-align:center}
+.ci-subtotal{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--plum);min-width:70px;text-align:right}
+.remove-btn{background:none;border:none;color:var(--ink-4);cursor:pointer;font-size:.72rem;font-weight:600;padding:.25rem .6rem;border-radius:6px;transition:all .18s;white-space:nowrap}
+.remove-btn:hover{color:var(--rose);background:var(--rose-pale)}
+
+/* EMPTY */
+.cart-empty{padding:4rem 2rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.empty-icon{font-size:3.5rem;opacity:.3}
+.empty-title{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--ink);letter-spacing:-.02em}
+.empty-sub{font-size:.85rem;color:var(--ink-3)}
+.browse-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:99px;padding:.72rem 1.6rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .22s;text-decoration:none;box-shadow:0 4px 20px rgba(74,21,105,.3);margin-top:.5rem}
+.browse-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,21,105,.38)}
+
+/* SUMMARY CARD */
+.summary-card{background:white;border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;position:sticky;top:80px}
+.summary-head{padding:1.3rem 1.6rem;border-bottom:1px solid var(--border);background:var(--cream)}
+.summary-head h2{font-family:'Fraunces',serif;font-size:1.2rem;color:var(--ink);letter-spacing:-.01em}
+.summary-body{padding:1.4rem 1.6rem}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.86rem;color:var(--ink-3)}
+.summary-row:last-of-type{border-bottom:none}
+.summary-row.total-row{padding-top:.8rem;border-top:2px solid var(--border-2);border-bottom:none;margin-top:.3rem}
+.summary-row .lbl{font-weight:500}
+.summary-row .val{font-weight:700;color:var(--ink)}
+.summary-row.total-row .lbl{font-size:.95rem;font-weight:700;color:var(--ink)}
+.summary-row.total-row .val{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--plum)}
+.free-tag{font-size:.68rem;font-weight:700;background:var(--mint-pale);color:var(--mint);padding:.15rem .5rem;border-radius:99px;border:1px solid rgba(30,122,90,.2)}
+.checkout-btn{width:100%;background:linear-gradient(135deg,var(--plum),var(--plum-2));color:white;border:none;border-radius:99px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.01em;cursor:pointer;transition:all .22s;box-shadow:0 4px 20px rgba(74,21,105,.3);margin-top:1rem}
+.checkout-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,21,105,.38)}
+.checkout-btn:disabled{background:var(--ink-4);cursor:not-allowed;box-shadow:none}
+.continue-link{display:block;text-align:center;margin-top:.8rem;font-size:.8rem;font-weight:500;color:var(--ink-3);text-decoration:none;transition:color .15s}
+.continue-link:hover{color:var(--plum)}
+
+/* PROMO INPUT */
+.promo-section{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.promo-label{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-4);margin-bottom:.5rem;display:block}
+.promo-wrap{display:flex;gap:6px}
+.promo-input{flex:1;background:var(--cream);border:1.5px solid var(--border-2);border-radius:99px;padding:.55rem 1rem;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .18s}
+.promo-input:focus{border-color:var(--plum-3)}
+.promo-btn{background:var(--plum-pale);border:1.5px solid var(--border-2);color:var(--plum);border-radius:99px;padding:.55rem 1rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
+.promo-btn:hover{background:var(--plum);color:white;border-color:var(--plum)}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:white;padding:.7rem 1.5rem;border-radius:99px;font-size:.82rem;font-weight:500;z-index:9999;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--mint)}
+.toast.error{background:var(--rose)}
+
+footer{margin-top:3rem;padding:1.8rem;border-top:1px solid var(--border);text-align:center;font-size:.78rem;color:var(--ink-4);font-weight:500;position:relative;z-index:1}
+
+@media(max-width:860px){.cart-layout{grid-template-columns:1fr}.summary-card{position:static}}
+@media(max-width:640px){.nav{padding:0 1rem}.nav-links{display:none}.page{padding:1.5rem 1rem}.page-title{font-size:1.8rem}.cart-row{flex-wrap:wrap;gap:10px}.ci-controls{width:100%;justify-content:space-between}}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="mainNav">
+  <a href="home.html" class="nav-logo">
+    <div class="nav-logo-mark">🍰</div>
+    Ces Luscious Foods
+  </a>
+  <div class="nav-links">
+    <a href="home.html" class="active">Home</a>
+    <a href="shop.html">Menu</a>
+    <a href="cart.html">My Bag</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="profile.html">My Profile</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="window.location.href='cart.html'">
+      🛒 Bag
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-hero">
+    <div class="breadcrumb">
+      <a href="home.html">Home</a>
+      <span>›</span>
+      <span>Shopping Bag</span>
+    </div>
+    <h1 class="page-title">Your <em>Bag</em></h1>
+  </div>
+  <div class="cart-layout">
+    <div class="cart-card" id="cartCard">
+      <!-- Rendered by JS -->
+    </div>
+    <div class="summary-card">
+      <div class="summary-head"><h2>Order Summary</h2></div>
+      <div class="summary-body">
+        <div class="summary-row"><span class="lbl">Subtotal</span><span class="val" id="subtotalVal">₱0</span></div>
+        <div class="summary-row"><span class="lbl">Delivery fee</span><span class="val" id="deliveryVal">₱50</span></div>
+        <div class="summary-row" id="freeRow" style="display:none"><span class="lbl">Free delivery</span><span class="val free-tag">Applied ✓</span></div>
+        <div class="summary-row total-row"><span class="lbl">Total</span><span class="val" id="totalVal">₱0</span></div>
+        <button class="checkout-btn" id="checkoutBtn" onclick="goCheckout()">Proceed to Checkout →</button>
+        <a href="shop.html" class="continue-link">← Continue shopping</a>
+        <div class="promo-section">
+          <span class="promo-label">Promo code</span>
+          <div class="promo-wrap">
+            <input class="promo-input" id="promoInput" placeholder="Enter code…">
+            <button class="promo-btn" onclick="applyPromo()">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Ces Luscious Foods · Sweetness for every occasion · Angeles City, PH</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const DELIVERY_FEE = 50;
+const FREE_DELIVERY_THRESHOLD = 500;
+
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2700);
+}
+
+// ── Auth guard ──
+const _user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+if (!_user) setTimeout(() => window.location.href = 'login.html', 200);
+
+function getCart() { return JSON.parse(localStorage.getItem('ces_cart') || '[]'); }
+function saveCart(c) { localStorage.setItem('ces_cart', JSON.stringify(c)); render(); }
+
+function updateNavBadge(){
+  const c = getCart();
+  document.getElementById('cartCount').textContent = c.reduce((s,i) => s + i.quantity, 0);
+}
+
+function updateQty(id, delta){
+  let c = getCart();
+  const idx = c.findIndex(i => i.id === id);
+  if (idx === -1) return;
+  const name = c[idx].name;
+  c[idx].quantity += delta;
+  if (c[idx].quantity <= 0) {
+    c.splice(idx, 1);
+    showToast(`Removed ${name}`);
+  } else {
+    showToast('Updated quantity', 'success');
+  }
+  saveCart(c);
+}
+
+function removeItem(id){
+  let c = getCart();
+  const item = c.find(i => i.id === id);
+  if (!item) return;
+  saveCart(c.filter(i => i.id !== id));
+  showToast(`Removed ${item.name}`);
+}
+
+function render(){
+  const c   = getCart();
+  const btn = document.getElementById('checkoutBtn');
+  updateNavBadge();
+
+  const card = document.getElementById('cartCard');
+
+  if (!c.length){
+    card.innerHTML = `
+      <div class="cart-empty">
+        <div class="empty-icon">🍰</div>
+        <div class="empty-title">Your bag is empty</div>
+        <div class="empty-sub">Add some delicious Filipino desserts to get started!</div>
+        <a href="shop.html" class="browse-btn">Browse Menu →</a>
+      </div>`;
+    document.getElementById('subtotalVal').textContent = '₱0';
+    document.getElementById('deliveryVal').textContent = '₱' + DELIVERY_FEE;
+    document.getElementById('totalVal').textContent    = '₱' + DELIVERY_FEE;
+    document.getElementById('freeRow').style.display   = 'none';
+    btn.disabled = true;
+    return;
+  }
+
+  btn.disabled = false;
+  const subtotal = c.reduce((s,i) => s + i.price * i.quantity, 0);
+  const isFree   = subtotal >= FREE_DELIVERY_THRESHOLD;
+  const delivery = isFree ? 0 : DELIVERY_FEE;
+  const total    = subtotal + delivery;
+
+  document.getElementById('subtotalVal').textContent = '₱' + subtotal.toLocaleString();
+  document.getElementById('deliveryVal').textContent = isFree ? '—' : '₱' + DELIVERY_FEE;
+  document.getElementById('totalVal').textContent    = '₱' + total.toLocaleString();
+  document.getElementById('freeRow').style.display   = isFree ? 'flex' : 'none';
+
+  const count = c.reduce((s,i) => s + i.quantity, 0);
+  card.innerHTML = `
+    <div class="cart-card-head">
+      <h2>Items</h2>
+      <span class="item-count">${count} item${count !== 1 ? 's' : ''}</span>
+    </div>
+    ${c.map(item => `
+      <div class="cart-row">
+        <img class="ci-img" src="${item.image}" onerror="this.src='https://placehold.co/70/6b2d94/white?text=🍰'" alt="${item.name}">
+        <div class="ci-meta">
+          <div class="ci-name">${item.name}</div>
+          <div class="ci-unit">₱${item.price.toLocaleString()} each</div>
+        </div>
+        <div class="ci-controls">
+          <div class="qty-wrap">
+            <button class="qbtn" onclick="updateQty(${item.id},-1)">−</button>
+            <span class="qnum">${item.quantity}</span>
+            <button class="qbtn" onclick="updateQty(${item.id},1)">+</button>
+          </div>
+          <div class="ci-subtotal">₱${(item.price * item.quantity).toLocaleString()}</div>
+          <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+        </div>
+      </div>`).join('')}`;
+}
+
+// ── Checkout: save cart snapshot and redirect — order is created at checkout.html ──
+function goCheckout(){
+  const c = getCart();
+  if (!c.length) return;
+  localStorage.setItem('checkoutCart', JSON.stringify(c));
+  showToast('Heading to checkout…', 'success');
+  setTimeout(() => window.location.href = 'checkout.html', 600);
+}
+
+function applyPromo(){
+  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  if (!code) { showToast('Enter a promo code', 'error'); return; }
+  showToast('Code not recognized', 'error');
+}
+
+function logout(){
+  localStorage.removeItem('currentUser');
+  window.location.href = 'login.html';
+}
+
+window.addEventListener('scroll', () => document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 8));
+window.addEventListener('storage', e => { if (e.key === 'ces_cart') render(); });
+
+render();
+</script>
+</body>
+</html>
